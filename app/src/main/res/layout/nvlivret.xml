@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/backgrd"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/backgrd"
+        android:layout_margin="5dp">
+
+
+         <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nom du nouveau livret:"/>
+
+        <EditText
+            android:id="@+id/titreNvLivret"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="titre du livret"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:selectAllOnFocus="false"
+            android:singleLine="true" />
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nom de l'auteur:"/>
+
+        <EditText
+            android:id="@+id/auteurNvLivret"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom de l'auteur"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Commentaire:"/>
+
+        <EditText
+            android:id="@+id/commNvLivret"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="commentaire"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/cancelNvLivret"
+        android:layout_weight="1"
+        android:background="@color/btnBackgrnd"
+        android:layout_margin="10dp"
+        android:onClick="cancelNvLivret"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Valider"
+        android:id="@+id/validNvLivret"
+        android:layout_weight="1"
+        android:background="@color/btnBackgrnd"
+        android:layout_margin="10dp"
+        android:onClick="validNvLivret"
+        android:tag="valid"/>
+
+
+    </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_detail.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\menu\\menu_detail.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_entree.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\menu\\menu_entree.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_detail_mod.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\menu\\menu_detail_mod.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_options.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\menu\\menu_options.xml"
+    }
+]

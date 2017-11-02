@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="D:\JP\projetAndroid\exo_billard\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="D:\JP\projetAndroid\exo_billard\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_0408cf391ac23434514075cb226e4c32c3c1ab15\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\JP\projetAndroid\exo_billard\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9f080e11e781ea98ff3b522aa8bcbed0f184fb2f">
+        <dex dex="D:\JP\projetAndroid\exo_billard\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_067ea13add8f3c90eb4dbf339c8f67fe657edf52\classes.dex" />
+    </item>
+
+</items>

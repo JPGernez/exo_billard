@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+    <item
+        android:id="@+id/newExo"
+        android:showAsAction="ifRoom|withText"
+        android:title="Nouvel exo"/>
+    <item
+        android:id="@+id/copyExo"
+        android:showAsAction="ifRoom|withText"
+        android:title="Copier l'exo"/>
+    <item
+        android:id="@+id/modExo"
+        android:showAsAction="ifRoom|withText"
+        android:title="Modifier l'exo"/>
+    <item
+        android:id="@+id/delExo"
+        android:showAsAction="ifRoom|withText"
+        android:title="Supprimer l'exo"/>
+    <item
+        android:id="@+id/retourMenu"
+        android:showAsAction="ifRoom|withText"
+        android:title="Retour menu"
+        />
+</menu>

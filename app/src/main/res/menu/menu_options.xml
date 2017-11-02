@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:textColor="@color/textColor2"
+    android:popupBackground="@color/btnBackgrnd2"
+    >
+    <item
+        android:id="@+id/OptMisea0"
+        android:showAsAction="ifRoom|withText"
+        android:title="Parametrage par défaut"
+        />
+    <item
+        android:id="@+id/OptRetourMenu"
+        android:showAsAction="ifRoom|withText"
+        android:title="Retour"
+        />
+   </menu>

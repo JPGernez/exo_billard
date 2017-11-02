@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="titre_app">CARAMBOLE: Livrets d\'entraînements</string>
+    <string name="app_name">Exo_billard</string>
+    <string name="menu_affichage">A</string>
+    <string name="menu_prev">Prev</string>
+    <string name="menu_next">Next</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_ajout">+</string>
+    <string name="menu_enlev">-</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_unlock">UnLock</string>
+    <string name="menu_cancel">Cancel</string>
+
+    <string name="typBase">Coup de base</string>
+    <string name="typFolklo">Folklorique</string>
+    <string name="typFacile">Facile</string>
+    <string name="typDifficile">Difficile</string>
+	<string name="typPuissant">Coup puissant</string>
+	<string name="typRetro">Rétro</string>
+    <string name="typEffet">Effet</string>
+	<string name="typCoupNat">Coup naturel</string>
+	<string name="typBande">Avec bande</string>
+	<string name="typEchelle">Coup d\'échelle</string>
+	<string name="typCoule">Coulé</string>
+	<string name="typRappel">Rappel</string>
+	<string name="typPlacement">Placement</string>
+	<string name="typ3Bandes">3 bandes</string>
+	<string name="typMasse">Piqué/Massé</string>
+    <string name="typLent">En douceur</string>
+
+    <string name="newExo">Nouvel exo</string>
+    <string name="copyExo">Copier l\'exo</string>
+    <string name="modExo">Modifier l\'exo</string>
+    <string name="delExo">Supprimer l\'exo</string>
+    <string name="saveExo">Sauvegarder l\'exo</string>
+    <string name="undoExo">Annuler</string>
+
+           <array name="liste_couleurs_fr">
+        <item>Bleu</item>
+        <item>Rouge</item>
+        <item>Vert</item>
+    </array>
+    <array name="liste_couleurs">
+        <item>blue</item>
+        <item>red</item>
+        <item>green</item>
+    </array>
+    <array name="liste_lignes_fr">
+        <item>Lignes pleines</item>
+        <item>Lignes pointillées</item>
+        <item>Pas afficher les lignes</item>
+    </array>
+    <array name="liste_lignes">
+        <item>plein</item>
+        <item>point</item>
+        <item>sans</item>
+    </array>
+
+</resources>

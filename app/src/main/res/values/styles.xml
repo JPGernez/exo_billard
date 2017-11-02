@@ -1,0 +1,9 @@
+<resources>
+
+    <style name="AppTheme" parent="android:Theme.Black.NoTitleBar">
+        <!--
+            Ici vous pouvez rajouter tous les styles que vous souhaitez
+        -->
+    </style>
+ 
+</resources>

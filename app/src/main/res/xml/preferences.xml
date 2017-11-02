@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <PreferenceCategory android:title="Options d'affichage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+           <ListPreference
+            android:key="prefCouleur"
+            android:dialogTitle="Couleur du tapis"
+            android:entries="@array/liste_couleurs_fr"
+            android:entryValues="@array/liste_couleurs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:title="Choisir la couleur du tapis" />
+
+        <ListPreference
+            android:key="prefMouches"
+            android:dialogTitle="Choix du type de lignes pour les mouches"
+            android:entries="@array/liste_lignes_fr"
+            android:entryValues="@array/liste_lignes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:title="affichage des lignes de mouches" />
+
+        <ListPreference
+            android:key="prefCadres"
+            android:dialogTitle="Choix du type de lignes de cadre"
+            android:entries="@array/liste_lignes_fr"
+            android:entryValues="@array/liste_lignes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:title="affichage des lignes de cadres" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Autres"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+        <CheckBoxPreference
+            android:key="prefSoluce"
+            android:title="Affichage de la solution dès le début"
+            android:summaryOn="En mode entrainement on commence par affichier l'exo avec la solution"
+            android:summaryOff="En mode entrainement on commence par affichier que la position de départ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="prefSymetrie"
+            android:title="Symetrie en mode entraînement"
+            android:summaryOn="Les exercices sont affichés aléatoirement aux 4 coins du billard"
+            android:summaryOff="Les exercices sont affichés comme rentrés"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"/>
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

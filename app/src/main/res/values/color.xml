@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textColor">#ffffff</color> //
+    <color name="textColor2">#000000</color> //
+    <color name="btnBackgrnd">#033649</color> //3.54.73
+    <color name="btnBackgrndSel">#031634</color> //3.22.52
+    <color name="btnBackgrnd2">#1D4851</color> //29 72 81
+    <color name="btnBackgrnd2Sel">#774F38</color> //119.79.56
+    <color name="backgrd">#036564</color> //3,101,100
+</resources>
+
+
+

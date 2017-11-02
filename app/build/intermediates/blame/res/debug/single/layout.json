@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\commentaire.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\commentaire.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\exoview.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\exoview.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\nvlivret.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\nvlivret.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\typologie.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\typologie.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\exo_entree.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\exo_entree.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\choix_fichier.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\choix_fichier.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\old2_exo_entree.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\old2_exo_entree.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\importlivret.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\importlivret.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\old_exo_entree.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\old_exo_entree.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\select_livret.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\select_livret.xml"
+    },
+    {
+        "merged": "D:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\res\\merged\\debug\\layout\\old_entree.xml",
+        "source": "D:\\JP\\projetAndroid\\exo_billard\\app\\src\\main\\res\\layout\\old_entree.xml"
+    }
+]

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:textColor="@color/textColor2"
+    android:popupBackground="@color/btnBackgrnd2"
+    >
+
+    <item
+        android:id="@+id/newLivret"
+        android:showAsAction="ifRoom|withText"
+        android:title="Nouveau livret"
+        />
+    <item
+        android:id="@+id/modLivret"
+        android:showAsAction="ifRoom|withText"
+        android:title="Modifier le livret"
+        />
+    <item
+        android:id="@+id/supLivret"
+        android:showAsAction="ifRoom|withText"
+        android:title="Supprimer le livret"
+        />
+    <item
+        android:id="@+id/importL"
+        android:showAsAction="ifRoom|withText"
+        android:title="Importer livret"
+        />
+    <item
+        android:id="@+id/exportL"
+        android:showAsAction="ifRoom|withText"
+        android:title="Exporter livret"
+        />
+    <item
+        android:id="@+id/options"
+        android:showAsAction="ifRoom|withText"
+        android:title="Options"
+        />
+</menu>
