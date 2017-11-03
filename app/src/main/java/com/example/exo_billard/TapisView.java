@@ -148,18 +148,22 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 		mPaint.setStyle(Paint.Style.FILL);
 		if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeG);
 		else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeB);
-		if ("red"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeR);
+		else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurBandeR);
+		else mPaint.setColor(Constantes.couleurBandeNB);
 		mPaint.setStyle(Paint.Style.FILL);
 		pCanvas.drawPaint(mPaint);
 		//dessin tapis
 		if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurTapisG);
 		else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurTapisB);
-		if ("red"==Couleurs.intern())  mPaint.setColor(Constantes.couleurTapisR);
-
+		else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurTapisR);
+		else mPaint.setColor(Constantes.couleurTapisNB);
 		pCanvas.drawRect(largBande, largBande, longSurf + largBande, largSurf + largBande, mPaint);
 		
 		//dessin mouches
-		mPaint.setColor(Constantes.couleurMouche);
+		if ("green" == Couleurs.intern()) mPaint.setColor(Constantes.couleurMoucheG);
+		else if ("blue" == Couleurs.intern()) mPaint.setColor(Constantes.couleurMoucheB);
+		else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurMoucheR);
+		else mPaint.setColor(Constantes.couleurMoucheNB);
 		// petites bandes
 		pCanvas.drawRect(largBande / 3, largBande - largBande / 12, largBande * 2 / 3, largBande + largBande / 12, mPaint);
 		pCanvas.drawRect(largBande/3,largBande+largSurf/4-largBande/12,largBande*2/3,largBande+largSurf/4+largBande/12,mPaint);
@@ -200,7 +204,10 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 		pCanvas.drawRect(largBande + longSurf * 3 / 4 - largBande / 6, largBande + largSurf / 2 - largBande / 6, largBande + longSurf * 3 / 4 + largBande / 6, largBande + largSurf / 2 + largBande / 6, mPaint);
 
         //ligne de cadre
-		mPaint.setColor(Constantes.couleurLigne);
+		if ("green" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneG);
+		else if ("blue" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneB);
+		else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneR);
+		else mPaint.setColor(Constantes.couleurLigneNB);
 		mPaint.setPathEffect(null);
 		if ("point"==LCadres.intern()) {
 			mPaint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 0));
@@ -269,9 +276,9 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 					}
 			     	//dessin de l'empacement 
 					mPaint.setColor(bi.getCouleur());
-			     	mPaint.setShadowLayer(5, 5, 2, Color.GRAY);
-			     	pCanvas.drawCircle((x * longSurf / 100) + largBande, (y * largSurf / 100) + largBande, r * largSurf / 100, mPaint);
-			    	mPaint.setShadowLayer(0, 0, 0, Color.GRAY);
+						mPaint.setShadowLayer(3, 3, 3, Color.BLACK);
+						pCanvas.drawCircle((x * longSurf / 100) + largBande, (y * largSurf / 100) + largBande, r * largSurf / 100, mPaint);
+						mPaint.setShadowLayer(0, 0, 0, Color.GRAY);
                     mPaint.setPathEffect(null);
 			    	// Dessin de la trajectoire
 				    if (numEmpl !=0) {
@@ -287,6 +294,8 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 						if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeG);
 						else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeB);
 						if ("red"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeR);
+						else mPaint.setColor(Constantes.couleurBandeNB);
+
 						mPaint.setAlpha(200);
 						pCanvas.drawLine(x*longSurf/100+largBande, largBande, x*longSurf/100+largBande, largSurf+largBande, mPaint);
 				    	pCanvas.drawLine(largBande,y*largSurf/100+largBande, longSurf+largBande, y*largSurf/100+largBande, mPaint);
@@ -318,20 +327,27 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 			if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurRadarG);
 			else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurRadarB);
 			if ("red"==Couleurs.intern())  mPaint.setColor(Constantes.couleurRadarR);
-			mPaint.setShadowLayer(5, 5, 2, Color.GRAY);
+			else mPaint.setColor(Constantes.couleurRadarNB);
+			mPaint.setShadowLayer(3, 3, 3, Color.BLACK);
 			pCanvas.drawRect((xCentreRadar-rayon*5)*longSurf/100+largBande,(yCercle-rayon*10)*largSurf/100+largBande,(xCentreRadar+rayon*5)*longSurf/100+largBande,(yCercle+rayon*10)*largSurf/100+largBande,mPaint);
 	     	mPaint.setShadowLayer(0, 0, 0, Color.GRAY);
 	     	mPaint.setStyle(Paint.Style.STROKE);
 			mPaint.setColor(Color.WHITE);
 			mPaint.setStrokeWidth(largeur/400);
 			mPaint.setAlpha(200);
-			mPaint.setColor(Color.rgb(139,139,131));
+			if ("green" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneG);
+			else if ("blue" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneB);
+			if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneR);
+			else mPaint.setColor(Constantes.couleurLigneNB);
 			pCanvas.drawCircle((xCentreRadar*longSurf/100)+largBande, (yCercle*largSurf/100)+largBande, rayon*3*largSurf/100, mPaint);
 	     	pCanvas.drawCircle((xCentreRadar*longSurf/100)+largBande, (yCercle*largSurf/100)+largBande, rayon*5*largSurf/100, mPaint);
 	     	pCanvas.drawCircle((xCentreRadar*longSurf/100)+largBande, (yCercle*largSurf/100)+largBande, rayon*7*largSurf/100, mPaint);
 	     	
 			//dessin des mouches
-			mPaint.setColor(Constantes.couleurLigne);
+			if ("green" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneG);
+			else if ("blue" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneB);
+			else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneR);
+			else mPaint.setColor(Constantes.couleurLigneNB);
 			pCanvas.drawLine(4 * largSurf / 4 + largBande, largBande, 4 * largSurf / 4 + largBande, largSurf + largBande, mPaint);
 
 	     	if (Math.abs(xSelect-100/8)<rayon*5) {
@@ -364,7 +380,6 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 	     	if (Math.abs(ySelect-300/4)<rayon*10) {
 				pCanvas.drawLine(((xCentreRadar-rayon*5)*longSurf/100)+largBande,(yCercle-ySelect+300/4)*largSurf/100+largBande, ((xCentreRadar+rayon*5)*longSurf/100)+largBande,(yCercle-ySelect+300/4)*largSurf/100+largBande,  mPaint);
 				}
-			//mPaint.setColor(Color.rgb(16,78,139));
 
 	     	//dessin du cadre
             mPaint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 0));
@@ -387,7 +402,8 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 	     	//dessin des bandes
 			if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeG);
 			else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeB);
-			if ("red"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeR);
+			else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurBandeR);
+			else mPaint.setColor(Constantes.couleurBandeNB);
 			mPaint.setStyle(Paint.Style.FILL);
 	     	if (xSelect<rayon*5) {
 	     		pCanvas.drawRect((xCentreRadar-rayon*5)*longSurf/100+largBande,(yCercle-rayon*10)*largSurf/100+largBande,(xCentreRadar-xSelect)*longSurf/100+largBande,(yCercle+rayon*10)*largSurf/100+largBande,mPaint);
@@ -443,11 +459,11 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
         if (visucomm==1) {
 
 			mPaint.setStyle(Paint.Style.FILL);
-			mPaint.setColor(Color.rgb(11,22,22));
 			mPaint.setTextSize(largSurf / 20 );
 			if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeG);
 			else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeB);
-			if ("red"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeR);
+			else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurBandeR);
+			else mPaint.setColor(Constantes.couleurBandeNB);
 			mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 			pCanvas.drawCircle((xComm * longSurf / 100) + largBande, (yComm * largSurf / 100) + largBande , largBande * 1 / 4 , mPaint);
 			if (comment.contains("\n")) {

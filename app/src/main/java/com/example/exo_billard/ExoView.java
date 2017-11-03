@@ -9,6 +9,7 @@ import java.util.Random;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -135,7 +136,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
         RelativeLayout.LayoutParams lL1Params = new RelativeLayout.LayoutParams(longEcran,largButton);
         lL1Params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         lL1.setLayoutParams(lL1Params);
-		lL1.setBackgroundColor(R.color.textColor);
+		lL1.setBackgroundColor(Constantes.couleurtext);
 
         //Bouton Menus
         bOptions = new Button(this);
@@ -409,6 +410,15 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 			tapis.setAffich(0);
 			tapis.setVisuComm(0);
 		}
+		if (Symetrie == true) {
+			Random randomGenerator = new Random();
+			inverse = randomGenerator.nextInt(5) - 1;
+			tapis.setInverse(inverse);
+		} else {
+			inverse = 0;
+			tapis.setInverse(inverse);
+		}
+		tapis.setInverse(inverse);
 		tapis.setBille1(exo.getB(0));
 		tapis.setBille2(exo.getB(1));
 		tapis.setBille3(exo.getB(2));
@@ -501,8 +511,6 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		if (nbExo>0) {
 			exoEnCours = randomGenerator.nextInt(nbExo);
 		}
-		inverse=randomGenerator.nextInt(5)-1;
-		tapis.setInverse(inverse);
 		tapis.setEmplSelect(0);
 		readExo(exoEnCours);
 		drawTapis();
@@ -672,11 +680,11 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	 }
 
 	private void drawTapis() {
-		Canvas canvas=tapis.mSurfaceHolder.lockCanvas();
+		tapis.setLMouches(LMouches);
+		tapis.setLCadres(LCadres);
+		tapis.setCouleurs(Couleurs);
+		Canvas canvas = tapis.mSurfaceHolder.lockCanvas();
 		if (canvas != null) {
-			tapis.setLMouches(LMouches);
-			tapis.setLCadres(LCadres);
-			tapis.setCouleurs(Couleurs);
 			tapis.Draw(canvas);
 			tapis.mSurfaceHolder.unlockCanvasAndPost(canvas);
 		}
@@ -806,10 +814,24 @@ public boolean onMenuItemClick(MenuItem item) {
 		case R.id.retourMenu:
 			this.finish();
 			return true;
-    }
-    return true;
+		case R.id.options2:
+			Intent intent2 = new Intent(this, Preferences.class);
+			int result4 = 0;
+			startActivityForResult(intent2, result4);
+			return true;
+	}
+	return true;
 }
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//on regarde quelle Activity a répondu
+		Log.d("couleur", "sortie");
+		readPref();
+		//	readExo(exoEnCours);
+		drawTapis();
+
+	}
 }
 
 

@@ -19,8 +19,11 @@
         android:showAsAction="ifRoom|withText"
         android:title="Supprimer l'exo"/>
     <item
+        android:id="@+id/options2"
+        android:showAsAction="ifRoom|withText"
+        android:title="Options" />
+    <item
         android:id="@+id/retourMenu"
         android:showAsAction="ifRoom|withText"
-        android:title="Retour menu"
-        />
+        android:title="Retour menu" />
 </menu>

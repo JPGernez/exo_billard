@@ -6,22 +6,22 @@
     density="xxhdpi"
     format="10"
     plugin-version="2.3.3"
-    timestamp="1509054221489"
+    timestamp="1509655455990"
     token="-6011823544858474529"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="505" />
+        duration="458" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="10" />
+        duration="46" />
     <task
         name="verifier"
-        duration="2" />
+        duration="24" />
 
     <artifact
         location="D:\JP\projetAndroid\exo_billard\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
@@ -32,8 +32,14 @@
 
     <build
         build-mode="FULL"
-        timestamp="1509045216576"
+        timestamp="1509652826251"
         verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="D:\JP\projetAndroid\exo_billard\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
+            type="SPLIT" />
+        <artifact
+            location="D:\JP\projetAndroid\exo_billard\app\build\outputs\apk\app-debug.apk"
+            type="SPLIT_MAIN" />
         <artifact
             location="D:\JP\projetAndroid\exo_billard\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
             type="SPLIT" />
@@ -59,18 +65,12 @@
             location="D:\JP\projetAndroid\exo_billard\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
             type="SPLIT" />
         <artifact
-            location="D:\JP\projetAndroid\exo_billard\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
-            type="SPLIT" />
-        <artifact
             location="D:\JP\projetAndroid\exo_billard\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
             type="SPLIT" />
-        <artifact
-            location="D:\JP\projetAndroid\exo_billard\app\build\outputs\apk\app-debug.apk"
-            type="SPLIT_MAIN" />
     </build>
     <build
         build-mode="COLD"
-        timestamp="1509054187312"
+        timestamp="1509655370983"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="D:\JP\projetAndroid\exo_billard\app\build\outputs\apk\app-debug.apk"
@@ -78,7 +78,7 @@
     </build>
     <build
         build-mode="COLD"
-        timestamp="1509054221489"
+        timestamp="1509655455990"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="D:\JP\projetAndroid\exo_billard\app\build\intermediates\split-apk\debug\slices\slice_0.apk"

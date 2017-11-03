@@ -38,16 +38,19 @@
     <string name="saveExo">Sauvegarder l\'exo</string>
     <string name="undoExo">Annuler</string>
 
-           <array name="liste_couleurs_fr">
+    <array name="liste_couleurs_fr">
         <item>Bleu</item>
         <item>Rouge</item>
         <item>Vert</item>
+        <item>Noir et blanc</item>
     </array>
     <array name="liste_couleurs">
         <item>blue</item>
         <item>red</item>
         <item>green</item>
+        <item>netb</item>
     </array>
+
     <array name="liste_lignes_fr">
         <item>Lignes pleines</item>
         <item>Lignes pointillées</item>

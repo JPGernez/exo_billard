@@ -180,6 +180,13 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
 
        }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        readPref();
+        drawTapis();
+    }
+
     public void addListenerOnSpinnerItemSelection() {
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -285,32 +292,37 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
     }
 
     private void drawTapis() {
-          Canvas canvas = null;
+        Canvas canvas = null;
+
         canvas = tapis.mSurfaceHolder.lockCanvas();
+        tapis.setLMouches(LMouches);
+        tapis.setLCadres(LCadres);
+        tapis.setCouleurs(Couleurs);
+
         if (canvas != null) {
-            tapis.setLMouches(LMouches);
-            tapis.setLCadres(LCadres);
-            tapis.setCouleurs(Couleurs);
             tapis.Draw(canvas);
             tapis.mSurfaceHolder.unlockCanvasAndPost(canvas);
         }
+
         canvas = tapis2.mSurfaceHolder.lockCanvas();
+        tapis2.setLMouches(LMouches);
+        tapis2.setLCadres(LCadres);
+        tapis2.setCouleurs(Couleurs);
+
         if (canvas != null) {
-            tapis2.setLMouches(LMouches);
-            tapis2.setLCadres(LCadres);
-            tapis2.setCouleurs(Couleurs);
             tapis2.Draw(canvas);
             tapis2.mSurfaceHolder.unlockCanvasAndPost(canvas);
         }
+
         canvas = tapis3.mSurfaceHolder.lockCanvas();
+        tapis3.setLMouches(LMouches);
+        tapis3.setLCadres(LCadres);
+        tapis3.setCouleurs(Couleurs);
+
         if (canvas != null) {
-            tapis3.setLMouches(LMouches);
-            tapis3.setLCadres(LCadres);
-            tapis3.setCouleurs(Couleurs);
             tapis3.Draw(canvas);
-        }
-        if (canvas != null)
             tapis3.mSurfaceHolder.unlockCanvasAndPost(canvas);
+        }
     }
 
     private void readLivret() {
@@ -571,8 +583,7 @@ private void readPref() {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //on regarde quelle Activity a répondu
         readPref();
-        majListLivret();
-        readExo();
+        drawTapis();
 
 
     }
