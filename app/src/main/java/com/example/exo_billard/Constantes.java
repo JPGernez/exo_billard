@@ -6,12 +6,8 @@ public class Constantes {
 
 	// rayon de representaion des billes
 	public static final float rayon = 2.41f;
-	// Rayon de representation des emplacements intermediaires
-	public static final float point = 1.20f;
 	// rayon de selection lors d un click a l ecran
 	public static final float rayonSelect = 4f;
-	// temps entre 2 raffraichissement de l ecran
-	public static final int tmpsRaffraichissement = 100;
 
 	//Couleur utilisée
 	// tapis vert

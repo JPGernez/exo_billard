@@ -39,15 +39,14 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 	int inverse=0;
     int enableclick=0;
 
-	public String LMouches = "";
-	public String LCadres = "";
-	public String Couleurs = "";
+	public String LMouches = "point";
+	public String LCadres = "sans";
+	public String Couleurs = "blue";
 
 
 
 	// dimension bille
 	float rayon = Constantes.rayon;
-	float point = Constantes.point;
 
 
 	// bille selectionnee a l'ecran
@@ -71,21 +70,65 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 	public void setComment(String c) {
 		comment = c;
 	}
-	public void setXComm(float x) {xComm= (float) x; }
-	public void setYComm(float y) {yComm= (float) y; }
+
+	public void setXComm(float x) {
+		xComm = x;
+	}
+
+	public void setYComm(float y) {
+		yComm = y;
+	}
 	public float getXComm() { return xComm ; }
 	public float getYComm() { return yComm ; }
 
-    public void setLMouches(String lm) {LMouches = lm; Log.d("Tapis mouche",String.valueOf(LMouches));}
-	public void setLCadres(String lc) {LCadres = lc;Log.d("Tapis cadre",String.valueOf(LCadres));}
-	public void setCouleurs(String c) {Couleurs= c;}
+	public int couleurTapis = Constantes.couleurTapisB;
+	public int couleurRadar = Constantes.couleurRadarB;
+	public int couleurMouche = Constantes.couleurMoucheB;
+	public int couleurBande = Constantes.couleurBandeB;
+	public int couleurLigne = Constantes.couleurLigneB;
+
+	public void setLMouches(String lm) {
+		LMouches = lm;
+	}
+
+	public void setLCadres(String lc) {
+		LCadres = lc;
+	}
+
+	public void setCouleurs(String c) {
+		Couleurs = c;
+		if ("green".equals(Couleurs.intern())) {
+			couleurBande = Constantes.couleurBandeG;
+			couleurRadar = Constantes.couleurRadarG;
+			couleurLigne = Constantes.couleurLigneG;
+			couleurTapis = Constantes.couleurTapisG;
+			couleurMouche = Constantes.couleurMoucheG;
+		} else if ("blue".equals(Couleurs.intern())) {
+			couleurBande = Constantes.couleurBandeB;
+			couleurRadar = Constantes.couleurRadarB;
+			couleurLigne = Constantes.couleurLigneB;
+			couleurTapis = Constantes.couleurTapisB;
+			couleurMouche = Constantes.couleurMoucheB;
+		} else if ("red".equals(Couleurs.intern())) {
+			couleurBande = Constantes.couleurBandeR;
+			couleurRadar = Constantes.couleurRadarR;
+			couleurLigne = Constantes.couleurLigneR;
+			couleurTapis = Constantes.couleurTapisR;
+			couleurMouche = Constantes.couleurMoucheR;
+		} else {
+			couleurBande = Constantes.couleurBandeNB;
+			couleurRadar = Constantes.couleurRadarNB;
+			couleurLigne = Constantes.couleurLigneNB;
+			couleurTapis = Constantes.couleurTapisNB;
+			couleurMouche = Constantes.couleurMoucheNB;
+		}
+	}
 
 	public void setInverse(int inv) { inverse=inv; }
 
 	public void setVisuComm(int v) {
 		visucomm = v;
 	}
-	public int getVisuComm() { return visucomm; }
 
 	// lock de l exo
 	public void setLock(int l) {
@@ -112,9 +155,6 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 		affich=a;
 		}
 
-	public int getAffich() {
-		return affich;
-	}
 
 	public TapisView(Context pContext, int ena) {
 		super(pContext);
@@ -136,34 +176,25 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 	public void Draw(Canvas pCanvas) {
 
 		//rayon du dessin pour l emplacement (rayon de la bille ou du point)
-		float r = 0;
+		float r;
 		// coordonnees de l'emplacement precedent
-		float x_prec=0;
-		float y_prec=0;
+		float x_prec;
+		float y_prec;
 		//numero de bille et d'emplacement � d�ssiner
-		int numBille=-1;
-		int numEmpl=-1;
+		int numBille;
+		int numEmpl;
 
 		// Dessiner le fond de l'�cran en premier
 		mPaint.setStyle(Paint.Style.FILL);
-		if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeG);
-		else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeB);
-		else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurBandeR);
-		else mPaint.setColor(Constantes.couleurBandeNB);
+		mPaint.setColor(couleurBande);
 		mPaint.setStyle(Paint.Style.FILL);
 		pCanvas.drawPaint(mPaint);
 		//dessin tapis
-		if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurTapisG);
-		else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurTapisB);
-		else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurTapisR);
-		else mPaint.setColor(Constantes.couleurTapisNB);
+		mPaint.setColor(couleurTapis);
 		pCanvas.drawRect(largBande, largBande, longSurf + largBande, largSurf + largBande, mPaint);
 		
 		//dessin mouches
-		if ("green" == Couleurs.intern()) mPaint.setColor(Constantes.couleurMoucheG);
-		else if ("blue" == Couleurs.intern()) mPaint.setColor(Constantes.couleurMoucheB);
-		else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurMoucheR);
-		else mPaint.setColor(Constantes.couleurMoucheNB);
+		mPaint.setColor(couleurMouche);
 		// petites bandes
 		pCanvas.drawRect(largBande / 3, largBande - largBande / 12, largBande * 2 / 3, largBande + largBande / 12, mPaint);
 		pCanvas.drawRect(largBande/3,largBande+largSurf/4-largBande/12,largBande*2/3,largBande+largSurf/4+largBande/12,mPaint);
@@ -204,15 +235,12 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 		pCanvas.drawRect(largBande + longSurf * 3 / 4 - largBande / 6, largBande + largSurf / 2 - largBande / 6, largBande + longSurf * 3 / 4 + largBande / 6, largBande + largSurf / 2 + largBande / 6, mPaint);
 
         //ligne de cadre
-		if ("green" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneG);
-		else if ("blue" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneB);
-		else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneR);
-		else mPaint.setColor(Constantes.couleurLigneNB);
+		mPaint.setColor(couleurLigne);
 		mPaint.setPathEffect(null);
-		if ("point"==LCadres.intern()) {
+		if ("point".equals(LCadres.intern())) {
 			mPaint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 0));
 		}
-		if ("sans" != LCadres.intern()) {
+		if (!"sans".equals(LCadres.intern())) {
 			pCanvas.drawLine(largSurf / 3 + largBande, largBande, largSurf / 3 + largBande, largSurf + largBande, mPaint);
 			pCanvas.drawLine(longSurf - largSurf / 3 + largBande, largBande, longSurf - largSurf / 3 + largBande, largSurf + largBande, mPaint);
 			pCanvas.drawLine(largBande, largSurf / 3 + largBande, longSurf + largBande, largSurf / 3 + largBande, mPaint);
@@ -221,10 +249,10 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 		mPaint.setPathEffect(null);
 
         //ligne de mouche
-		if ("point"==LMouches.intern()) {
+		if ("point".equals(LMouches.intern())) {
 			mPaint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 0));
 		}
-		if ("sans" != LMouches.intern()) {
+		if (!"sans".equals(LMouches.intern())) {
 			pCanvas.drawLine(largSurf / 4 + largBande, largBande, largSurf / 4 + largBande, largSurf + largBande, mPaint);
 			pCanvas.drawLine(2 * largSurf / 4 + largBande, largBande, 2 * largSurf / 4 + largBande, largSurf + largBande, mPaint);
 			pCanvas.drawLine(3 * largSurf / 4 + largBande, largBande, 3 * largSurf / 4 + largBande, largSurf + largBande, mPaint);
@@ -242,17 +270,19 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 		for( Bille bi : B) {
 			numBille ++;
 			if(bi != null) {
+				x_prec = 0;
+				y_prec = 0;
 				numEmpl=-1;
 				for(Emplacement e : bi.getEmpl()) {
 					numEmpl ++;
-					float x=0;
+					float x;
 					if (inverse==0 || inverse==1) {
 						x = e.getX();
 					}
 					else {
 						x = 100 - e.getX();
 					}
-					float y=0;
+					float y;
 					if (inverse==0 || inverse==3) {
 						y = e.getY();
 					}
@@ -291,10 +321,7 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 				    // si la bille est selectionnee affichage des marqueurs de placement
 				    if  (numBille == billeSelect  && numEmpl==emplSelect) {
 						mPaint.setStrokeWidth(largeur/400);
-						if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeG);
-						else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeB);
-						if ("red"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeR);
-						else mPaint.setColor(Constantes.couleurBandeNB);
+						mPaint.setColor(couleurBande);
 
 						mPaint.setAlpha(200);
 						pCanvas.drawLine(x*longSurf/100+largBande, largBande, x*longSurf/100+largBande, largSurf+largBande, mPaint);
@@ -324,10 +351,7 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 			int yCercle=30;
 			// Dessin du radar
 			mPaint.setStyle(Paint.Style.FILL);
-			if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurRadarG);
-			else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurRadarB);
-			if ("red"==Couleurs.intern())  mPaint.setColor(Constantes.couleurRadarR);
-			else mPaint.setColor(Constantes.couleurRadarNB);
+			mPaint.setColor(couleurRadar);
 			mPaint.setShadowLayer(3, 3, 3, Color.BLACK);
 			pCanvas.drawRect((xCentreRadar-rayon*5)*longSurf/100+largBande,(yCercle-rayon*10)*largSurf/100+largBande,(xCentreRadar+rayon*5)*longSurf/100+largBande,(yCercle+rayon*10)*largSurf/100+largBande,mPaint);
 	     	mPaint.setShadowLayer(0, 0, 0, Color.GRAY);
@@ -335,19 +359,13 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 			mPaint.setColor(Color.WHITE);
 			mPaint.setStrokeWidth(largeur/400);
 			mPaint.setAlpha(200);
-			if ("green" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneG);
-			else if ("blue" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneB);
-			if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneR);
-			else mPaint.setColor(Constantes.couleurLigneNB);
+			mPaint.setColor(couleurLigne);
 			pCanvas.drawCircle((xCentreRadar*longSurf/100)+largBande, (yCercle*largSurf/100)+largBande, rayon*3*largSurf/100, mPaint);
 	     	pCanvas.drawCircle((xCentreRadar*longSurf/100)+largBande, (yCercle*largSurf/100)+largBande, rayon*5*largSurf/100, mPaint);
 	     	pCanvas.drawCircle((xCentreRadar*longSurf/100)+largBande, (yCercle*largSurf/100)+largBande, rayon*7*largSurf/100, mPaint);
 	     	
 			//dessin des mouches
-			if ("green" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneG);
-			else if ("blue" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneB);
-			else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurLigneR);
-			else mPaint.setColor(Constantes.couleurLigneNB);
+			mPaint.setColor(couleurLigne);
 			pCanvas.drawLine(4 * largSurf / 4 + largBande, largBande, 4 * largSurf / 4 + largBande, largSurf + largBande, mPaint);
 
 	     	if (Math.abs(xSelect-100/8)<rayon*5) {
@@ -400,10 +418,7 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
             }
 
 	     	//dessin des bandes
-			if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeG);
-			else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeB);
-			else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurBandeR);
-			else mPaint.setColor(Constantes.couleurBandeNB);
+			mPaint.setColor(couleurBande);
 			mPaint.setStyle(Paint.Style.FILL);
 	     	if (xSelect<rayon*5) {
 	     		pCanvas.drawRect((xCentreRadar-rayon*5)*longSurf/100+largBande,(yCercle-rayon*10)*largSurf/100+largBande,(xCentreRadar-xSelect)*longSurf/100+largBande,(yCercle+rayon*10)*largSurf/100+largBande,mPaint);
@@ -460,12 +475,9 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 
 			mPaint.setStyle(Paint.Style.FILL);
 			mPaint.setTextSize(largSurf / 20 );
-			if ("green"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeG);
-			else if ("blue"==Couleurs.intern())  mPaint.setColor(Constantes.couleurBandeB);
-			else if ("red" == Couleurs.intern()) mPaint.setColor(Constantes.couleurBandeR);
-			else mPaint.setColor(Constantes.couleurBandeNB);
+			mPaint.setColor(couleurBande);
 			mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-			pCanvas.drawCircle((xComm * longSurf / 100) + largBande, (yComm * largSurf / 100) + largBande , largBande * 1 / 4 , mPaint);
+			pCanvas.drawCircle((xComm * longSurf / 100) + largBande, (yComm * largSurf / 100) + largBande, largBande / 4, mPaint);
 			if (comment.contains("\n")) {
 				String[] parts = comment.split("\n");
 				for(int i=0;i<parts.length;i++) {
@@ -503,9 +515,9 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
         //Gestion des selections a l'ecran
 		if (enableclick==1) {
 			this.setLongClickable(true);
-
-			this.setOnTouchListener(new OnTouchListener()   {
-		     	public boolean onTouch(View myView, MotionEvent event) {
+			this.setLongClickable(true);
+			this.setOnTouchListener(new OnTouchListener() {
+				public boolean onTouch(View myView, MotionEvent event) {
 				 float x=0;
 				float y=0;
 				 int action = event.getActionMasked();
@@ -618,7 +630,9 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 			     }        
 
 		        }) ;
-              }
+
+			this.performClick();
+		}
 
 
 

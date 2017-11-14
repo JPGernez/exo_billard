@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -31,30 +32,30 @@ import android.widget.Toast;
 public class SqlBillardHelper extends SQLiteOpenHelper {
 
 	//Table des livrets
-	public static final String TABLE_LIV = "LIVRETS";
-	public static final String LIV_ID = "_idLivret";
-	public static final String LIV_TITRE = "Titre";
-	public static final String LIV_COMMENT = "Commentaire";
-	public static final String LIV_AUTEUR = "Auteur";
+    private static final String TABLE_LIV = "LIVRETS";
+    private static final String LIV_ID = "_idLivret";
+    private static final String LIV_TITRE = "Titre";
+    private static final String LIV_COMMENT = "Commentaire";
+    private static final String LIV_AUTEUR = "Auteur";
 
-	public static final String LIV_CREATE = "create table " + TABLE_LIV
-			+ " (" + LIV_ID + " integer primary key autoincrement, "
+    private static final String LIV_CREATE = "create table " + TABLE_LIV
+            + " (" + LIV_ID + " integer primary key autoincrement, "
 			+ LIV_TITRE + " text, "
 			+ LIV_COMMENT + " text, "
 			+ LIV_AUTEUR + " text ); ";
 
 
 	//Table des exos
-	public static final String TABLE_EXO = "EXOS";
-	public static final String EXO_ID = "_idExo";
-	public static final String EXO_COMMENT = "Commentaire";
-	public static final String EXOLIV_ID = "idLivret";
-	public static final String COMM_POSX = "xComm";
-	public static final String COMM_POSY = "yComm";
-	public static final String NOTE ="exo_note";
+    private static final String TABLE_EXO = "EXOS";
+    private static final String EXO_ID = "_idExo";
+    private static final String EXO_COMMENT = "Commentaire";
+    private static final String EXOLIV_ID = "idLivret";
+    private static final String COMM_POSX = "xComm";
+    private static final String COMM_POSY = "yComm";
+    private static final String NOTE = "exo_note";
 
-	public static final String EXO_CREATE = "create table " + TABLE_EXO
-			+ " (" + EXO_ID + " integer primary key autoincrement, "
+    private static final String EXO_CREATE = "create table " + TABLE_EXO
+            + " (" + EXO_ID + " integer primary key autoincrement, "
 			+ EXO_COMMENT + " text, "
 			+ EXOLIV_ID + " integer, "
 			+ NOTE + " integer, "
@@ -63,15 +64,15 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 
 
 	//Table des emplacements
-	public static final String TABLE_EMPL = "EMPLACEMENT";
-	public static final String EMPL_ID = "idExo";
-	public static final String EMPL_BILLE = "NumBille";
-	public static final String EMPL_NUMEMPL = "Numero";
-	public static final String EMPL_X = "X";
-	public static final String EMPL_Y = "Y";
-	public static final String EMPL_TYPE = "Type";
-	public static final String EMPL_CREATE = "create table " + TABLE_EMPL
-			+ " (" + EMPL_ID + " integer, "
+    private static final String TABLE_EMPL = "EMPLACEMENT";
+    private static final String EMPL_ID = "idExo";
+    private static final String EMPL_BILLE = "NumBille";
+    private static final String EMPL_NUMEMPL = "Numero";
+    private static final String EMPL_X = "X";
+    private static final String EMPL_Y = "Y";
+    private static final String EMPL_TYPE = "Type";
+    private static final String EMPL_CREATE = "create table " + TABLE_EMPL
+            + " (" + EMPL_ID + " integer, "
 			+ EMPL_BILLE + " integer, "
 			+ EMPL_NUMEMPL + " integer, "
 			+ EMPL_X + " real, "
@@ -79,13 +80,26 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 			+ EMPL_TYPE + " text); ";
 
 	//Table des tags
-	public static final String TABLE_TAG = "TAGEXO";
-	public static final String TAG_ID = "idExo";
-	public static final String MOTCLE = "MotCle";
+    private static final String TABLE_TAG = "TAGEXO";
+    private static final String TAG_ID = "idExo";
+    private static final String MOTCLE = "MotCle";
 
-	public static final String TAG_CREATE = "create table " + TABLE_TAG
-			+ " (" + TAG_ID + " integer, "
+    private static final String TAG_CREATE = "create table " + TABLE_TAG
+            + " (" + TAG_ID + " integer, "
 			+ MOTCLE + " text); ";
+
+    //Table des ScoreExo
+    private static final String TABLE_SCORE = "SCORE";
+    private static final String SCORE_ID = "idExo";
+    private static final String SCORE_RES = "NbCoups";
+    private static final String SCORE_RGP = "Regroupement";
+    private static final String SCORE_DATE = "Date";
+
+    private static final String SCORE_CREATE = "create table " + TABLE_SCORE
+            + " (" + SCORE_ID + " integer, "
+            + SCORE_RES + " integer, "
+            + SCORE_RGP + " integer, "
+            + SCORE_DATE + " integer ); ";
 
 
 
@@ -93,15 +107,13 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 //	  public static final String DATABASE_CREATE = LIV_CREATE + " "+ EXO_CREATE + " " + EMPL_CREATE; 
 //	  public static final String DATABASE_CREATE =EXO_CREATE +" "+ EMPL_CREATE; 
 	private static final String DATABASE_NAME = "ExoBillard.db";
-	private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
 
 	public SqlBillardHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         File dossier =new File(Environment.getExternalStorageDirectory(), "ExoBillard");
-        if (dossier.exists() && dossier.isDirectory()){
-
-        } else
+        if (!dossier.exists() && dossier.isDirectory())
             dossier.mkdir();
 
         }
@@ -112,6 +124,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		database.execSQL(LIV_CREATE);
 		database.execSQL(EMPL_CREATE);
 		database.execSQL(TAG_CREATE);
+        database.execSQL(SCORE_CREATE);
+
 	}
 
 	@Override
@@ -119,17 +133,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		Log.w(SqlBillardHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
-	}
-
-	public File getAlbumStorageDir(String albumName) {
-		// Get the directory for the user's public pictures directory.
-		File file = new File(Environment.getExternalStorageDirectory(), "ExoBillard");
-		if (!file.mkdirs()) {
-
-		}
-		return file;
-	}
-
+        db.execSQL(SCORE_CREATE);
+    }
 
 	// ------------------------ "EXO" table methods ----------------//
 
@@ -178,9 +183,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		vallivret.put(LIV_AUTEUR, livret.getAuteur());
 		vallivret.put(LIV_TITRE, livret.getTitre());
 		// insert row
-		long livret_id = db.insert(TABLE_LIV, null, vallivret);
-		return livret_id;
-	}
+        return db.insert(TABLE_LIV, null, vallivret);
+    }
 
 	public long modLivret(Livret livret) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -208,7 +212,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 			livret.setComment(cLiv.getString((cLiv.getColumnIndex(LIV_COMMENT))));
 			livret.setAuteur(cLiv.getString((cLiv.getColumnIndex(LIV_AUTEUR))));
 		}
-		// recup liste exo
+        cLiv.close();
+        // recup liste exo
 		String selectExos = "SELECT  * FROM " + TABLE_EXO
 				+ " WHERE " + EXOLIV_ID + " = " + liv_id + ";";
 		Cursor cExos = db.rawQuery(selectExos, null);
@@ -217,7 +222,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 				livret.addNumExo(cExos.getInt(cExos.getColumnIndex(EXO_ID)));
 			} while (cExos.moveToNext());
 		}
-		return livret;
+        cExos.close();
+        return livret;
 
 	}
 
@@ -232,7 +238,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		if (cLiv.moveToFirst()) {
 			titre = cLiv.getString((cLiv.getColumnIndex(LIV_TITRE)));
 		}
-		// recup liste exo
+        cLiv.close();
+        // recup liste exo
 
 		return titre;
 
@@ -250,7 +257,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 				lLivrets.add(cLLiv.getInt((cLLiv.getColumnIndex(LIV_ID))));
 			} while (cLLiv.moveToNext());
 		}
-		return lLivrets;
+        cLLiv.close();
+        return lLivrets;
 	}
 
 	/**
@@ -273,15 +281,15 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 
 		ContentValues valtag = new ContentValues();
 		valtag.put(TAG_ID, exo.getId());
-		String liste_mot = " ";
-		for (Map.Entry<String, Integer> entree : exo.motsCles.motscles.entrySet()) {
+        StringBuilder liste_mot = new StringBuilder();
+        for (Map.Entry<String, Integer> entree : exo.motsCles.motscles.entrySet()) {
 			if (exo.motsCles.getMotCle(entree.getKey()) == 1) {
-				liste_mot = liste_mot + entree.getKey() + " ";
-			}
+                liste_mot.append(entree.getKey()).append(" ");
+            }
 		}
-		liste_mot = liste_mot.trim();
-		valtag.put(MOTCLE, liste_mot.trim());
-		db.insert(TABLE_TAG, null, valtag);
+        liste_mot.trimToSize();
+        valtag.put(MOTCLE, liste_mot.toString());
+        db.insert(TABLE_TAG, null, valtag);
 
 		createEmpls(exo.getId(), 0, exo.getB(0));
 		createEmpls(exo.getId(), 1, exo.getB(1));
@@ -454,6 +462,18 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		return empl_id;
 	}
 
+    public void saveResult(int exoId, int score, int regroup) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues res = new ContentValues();
+        res.put(SCORE_ID, exoId);
+        res.put(SCORE_RES, score);
+        res.put(SCORE_RGP, regroup);
+        res.put(SCORE_DATE, System.currentTimeMillis());
+        // insert row
+        db.insert(TABLE_SCORE, null, res);
+    }
 
 
 	public String exportLivret  (int liv_id) {
@@ -480,9 +500,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 
             File myFile1 = new File(myDir, livret.getTitre() + ".eBi1"); //on déclare notre futur fichier
             File myFile2 = new File(myDir, livret.getTitre() + ".eBi2"); //on déclare notre futur fichier
-            if (myFile1.exists()) {
 
-            }
             try {
                 // ouverture d'un flux de sortie vers le fichier
                 FileOutputStream fos1 = new FileOutputStream(myFile1);

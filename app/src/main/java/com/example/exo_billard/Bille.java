@@ -50,10 +50,6 @@ public class Bille implements Serializable {
         return Emplacements;
 	}
 
-//	public void setEmpl (List<Emplacement> e) {
-//		this.Emplacements=e;
-//	}
-
     // Recuperation de la position X du ieme emplacement
 	public float getX (int i) {
         return this.Emplacements.get(i).getX();

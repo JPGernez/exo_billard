@@ -1,4 +1,4 @@
-#Fri Nov 03 19:25:54 CET 2017
-base.0=D\:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\22
+#Tue Nov 14 21:30:34 CET 2017
+base.0=D\:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\41
 renamed.0=classes.dex
-file.0=D\:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\22\\classes.dex
+file.0=D\:\\JP\\projetAndroid\\exo_billard\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\41\\classes.dex

@@ -67,15 +67,10 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
     public boolean Soluce=true;
     public boolean Symetrie=true;
 
-    public static final String PREFS = "Prefs_exo_billard";
-
     SharedPreferences  sharedPreferences ;
     MotsCles tags = new MotsCles();
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-       @Override
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Passer la fen�tre en fullscreen == cacher la barre de notification
@@ -271,13 +266,12 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
     }
 
   private void addItemsOnSpinner() {
-    ArrayList<String> titres = new ArrayList<String>();
+      ArrayList<String> titres = new ArrayList<>();
     titres.add("Parcourir tous les livrets");
     titres.add("Parcourir les favoris");
      for (int i = 0; i < lLivret.size(); i++) {
-        titres.add(db.getTitreLivret((int) lLivret.get(i)));
+         titres.add(db.getTitreLivret(lLivret.get(i)));
      }
-    String[] array = titres.toArray(new String[0]);
     ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, titres);
     spinner.setAdapter(adapter);
     spinner.setSelection(liv+1);
@@ -292,7 +286,7 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
     }
 
     private void drawTapis() {
-        Canvas canvas = null;
+        Canvas canvas;
 
         canvas = tapis.mSurfaceHolder.lockCanvas();
         tapis.setLMouches(LMouches);
@@ -351,42 +345,41 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
 
        if (lExo.size() >= premExo + 1) {
             tapis.setVisibility(View.VISIBLE);
-            ((TextView) this.findViewById(R.id.desc1)).setVisibility(View.VISIBLE);
+           this.findViewById(R.id.desc1).setVisibility(View.VISIBLE);
             readExo1(premExo);
         } else {
             if (liv > -1 ) {
                 tapis.setVisibility(View.VISIBLE);
-                ((TextView) this.findViewById(R.id.desc1)).setVisibility(View.VISIBLE);
+                this.findViewById(R.id.desc1).setVisibility(View.VISIBLE);
                 ((TextView) this.findViewById(R.id.desc1)).setText("Cliquer sur le tapis pour commencer");
             }
            if (liv == -2 ) {
                tapis.setVisibility(View.INVISIBLE);
-               ((TextView) this.findViewById(R.id.desc1)).setVisibility(View.VISIBLE);
+               this.findViewById(R.id.desc1).setVisibility(View.VISIBLE);
                ((TextView) this.findViewById(R.id.desc1)).setText("Commencer par créer un livret");
            }
            if (liv == -1 ) {
                tapis.setVisibility(View.INVISIBLE);
-               ((TextView) this.findViewById(R.id.desc1)).setVisibility(View.VISIBLE);
+               this.findViewById(R.id.desc1).setVisibility(View.VISIBLE);
                ((TextView) this.findViewById(R.id.desc1)).setText("Pas d'exercice favori");
            }
         }
         if (lExo.size() >= premExo + 2) {
             tapis2.setVisibility(View.VISIBLE);
-            ((TextView) this.findViewById(R.id.desc2)).setVisibility(View.VISIBLE);
+            this.findViewById(R.id.desc2).setVisibility(View.VISIBLE);
             readExo2(premExo + 1);
         } else {
             tapis2.setVisibility(View.INVISIBLE);
-            ((TextView) this.findViewById(R.id.desc2)).setVisibility(View.INVISIBLE);
+            this.findViewById(R.id.desc2).setVisibility(View.INVISIBLE);
         }
         if (lExo.size() >= premExo + 3) {
             tapis3.setVisibility(View.VISIBLE);
-            ((TextView) this.findViewById(R.id.desc3)).setVisibility(View.VISIBLE);
+            this.findViewById(R.id.desc3).setVisibility(View.VISIBLE);
             readExo3(premExo + 2);
         } else {
             tapis3.setVisibility(View.INVISIBLE);
-            ((TextView) this.findViewById(R.id.desc3)).setVisibility(View.INVISIBLE);
+            this.findViewById(R.id.desc3).setVisibility(View.INVISIBLE);
         }
-        ;
         drawTapis();
     }
 private void readPref() {
@@ -504,16 +497,6 @@ private void readPref() {
                 return true;
             case R.id.exportL:
                 if (liv >= 0) {
-                    Livret Liv = db.getLivret(lLivret.get(liv));
-
-                    File myDir = new File(Environment.getExternalStorageDirectory(), "ExoBillard");
-
-
-                    File myFile1 = new File(myDir, Liv.getTitre() + ".eBi1"); //on déclare notre futur fichier
-                    if (myFile1.exists()) {
-
-                    }
-
                     String result2 = db.exportLivret(lLivret.get(liv));
                     Toast.makeText(Exo_entree.this, result2, Toast.LENGTH_LONG).show();
                 }
@@ -532,7 +515,7 @@ private void readPref() {
                 Spinner spinner = (Spinner) dialogview.findViewById(R.id.listImport);
 
 
-                ArrayList<String> titres = new ArrayList<String>();
+                ArrayList<String> titres = new ArrayList<>();
 
                 File[] fichiers = myDir.listFiles();
                 int i = 0;
@@ -540,7 +523,7 @@ private void readPref() {
                 if(fichiers != null)
                     // On les ajoute à  l'adaptateur
                     for(File f : fichiers) {
-                        if(f.toString().endsWith(".eBi1") == true) {
+                        if (f.toString().endsWith(".eBi1")) {
                             String nomCourt = (f.getName() != null) ? f.getName().substring(0,f.getName().indexOf('.')) : "";
                             titres.add(nomCourt);
                             i++;
@@ -548,7 +531,6 @@ private void readPref() {
 
                     }
                 if (i>0 ) {
-                    String[] array = titres.toArray(new String[0]);
                     ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, titres);
                     spinner.setAdapter(adapter);
                     spinner.setBackgroundColor(Color.rgb(29,72,81));

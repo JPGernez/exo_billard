@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,8 +24,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -71,6 +74,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	Button bVerso ;
 	Button bAlea ;
 	Button bFav ;
+	Button bRes;
 
 	SqlBillardHelper db;
 
@@ -79,6 +83,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
     private int filtre=0;
 	SharedPreferences  sharedPreferences ;
 
+	@SuppressLint("ResourceType")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,12 +92,11 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		if (extras != null) {
 			//---------Récupère informations------------
 			livret = extras.getInt("livret_sel");
-		}
-		else livret=-1;
-	    tags.creaListMotsCles(1);
+		} else livret=-1;
+		tags.creaListMotsCles(1);
 
 		db = new SqlBillardHelper(this);
-        // mAj Liste exo
+		// mAj Liste exo
 
 		sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		readPref();
@@ -101,48 +105,41 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		if (extras != null) {
 			if (extras.getInt("exo_sel")>=0) {
 				if (listExo.contains(extras.getInt("exo_sel")))
-						exoEnCours = listExo.indexOf(extras.getInt("exo_sel"));
+					exoEnCours = listExo.indexOf(extras.getInt("exo_sel"));
 			} else exoEnCours=0;
 			//---------Récupère informations------------
 
-		}
-		else exoEnCours=0;
+		} else exoEnCours=0;
 		Log.d("Affichage Exo", String.valueOf(exoEnCours));
 
 		// Passer la fen�tre en fullscreen == cacher la barre de notification
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
-        // Recuperation de la taille de l'ecran
-        setContentView(R.layout.exoview);
-		DisplayMetrics metrics = new DisplayMetrics(); 
+
+		// Recuperation de la taille de l'ecran
+		setContentView(R.layout.exoview);
+		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int largEcran = metrics.heightPixels;
-        int taille_barre=0;  
-		Resources resources = this.getResources();
-		int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-		if (resourceId > 0) {
-		   taille_barre= resources.getDimensionPixelSize(resourceId);
-		}
 		int longEcran = metrics.widthPixels;
 
-		
+
 		// Calcul de la taille des �l�ments
 		int largButton=(largEcran)*10/100;
 		int largTapis=(int) Math.min(largEcran-largButton, longEcran*52.60/100);
 		int longTapis=(int) (largTapis*190.1/100);
 
 		//Ajout Positionnement des boutons
-	    RelativeLayout lL1 = new RelativeLayout(this);
-        RelativeLayout.LayoutParams lL1Params = new RelativeLayout.LayoutParams(longEcran,largButton);
-        lL1Params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        lL1.setLayoutParams(lL1Params);
+		RelativeLayout lL1 = new RelativeLayout(this);
+		RelativeLayout.LayoutParams lL1Params = new RelativeLayout.LayoutParams(longEcran,largButton);
+		lL1Params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		lL1.setLayoutParams(lL1Params);
 		lL1.setBackgroundColor(Constantes.couleurtext);
 
-        //Bouton Menus
-        bOptions = new Button(this);
-        bOptions.setId(1001);
-        bOptions.setBackgroundResource(R.drawable.ic_action_overflow);
-        bOptions.setOnClickListener(new View.OnClickListener() {
+		//Bouton Menus
+		bOptions = new Button(this);
+		bOptions.setId(1001);
+		bOptions.setBackgroundResource(R.drawable.ic_action_overflow);
+		bOptions.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				PopupMenu popupMenu = new PopupMenu(ExoView.this, v);
 				popupMenu.setOnMenuItemClickListener(ExoView.this);
@@ -154,7 +151,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 				popupMenu.show();
 			}
 		});
-        RelativeLayout.LayoutParams pOptions = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		RelativeLayout.LayoutParams pOptions = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pOptions.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
 		bOptions.setLayoutParams(pOptions);
 		lL1.addView(bOptions);
@@ -165,12 +162,11 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		bFav.setBackgroundResource(R.drawable.ic_action_fav_border);
 		bFav.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-                fav=exo.getNote();
+				fav=exo.getNote();
 				if (fav == 0) {
 					fav = 1;
 					bFav.setBackgroundResource(R.drawable.ic_action_fav_full);
-				}
-				else {
+				} else {
 					fav = 0;
 					bFav.setBackgroundResource(R.drawable.ic_action_fav_border);
 				}
@@ -188,20 +184,20 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 
 
 		//Bouton Commentaire
-        bComm = new Button(this);
-        bComm.setId(1002);
+		bComm = new Button(this);
+		bComm.setId(1002);
 		bComm.setVisibility(View.INVISIBLE);
-        bComm.setBackgroundResource(R.drawable.ic_action_view_as_list);
-        bComm.setOnClickListener(new View.OnClickListener() {
+		bComm.setBackgroundResource(R.drawable.ic_action_view_as_list);
+		bComm.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				affichComm();
 			}
 		});
-        RelativeLayout.LayoutParams pComm = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
-        pComm.addRule(RelativeLayout.RIGHT_OF,bFav.getId());
-        pComm.leftMargin=largButton;
-        bComm.setLayoutParams(pComm);
-        lL1.addView(bComm);
+		RelativeLayout.LayoutParams pComm = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		pComm.addRule(RelativeLayout.RIGHT_OF,bFav.getId());
+		pComm.leftMargin=largButton;
+		bComm.setLayoutParams(pComm);
+		lL1.addView(bComm);
 
 		//Bouton verso
 		bVerso = new Button(this);
@@ -220,68 +216,68 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		lL1.addView(bVerso);
 
 		//Bouton Typologie
-        bTypo = new Button(this);
-        bTypo.setId(1003);
-        bTypo.setBackgroundResource(R.drawable.ic_action_labels);
-        bTypo.setOnClickListener(new View.OnClickListener() {
-                                  public void onClick(View v)   {affichTypo(); } } );
-        RelativeLayout.LayoutParams pTypo = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
-        pTypo.leftMargin=largButton/2;
-        pTypo.addRule(RelativeLayout.RIGHT_OF, bComm.getId());
-        bTypo.setLayoutParams(pTypo);
-        lL1.addView(bTypo);
+		bTypo = new Button(this);
+		bTypo.setId(1003);
+		bTypo.setBackgroundResource(R.drawable.ic_action_labels);
+		bTypo.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v)   {affichTypo(); } } );
+		RelativeLayout.LayoutParams pTypo = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		pTypo.leftMargin=largButton/2;
+		pTypo.addRule(RelativeLayout.RIGHT_OF, bComm.getId());
+		bTypo.setLayoutParams(pTypo);
+		lL1.addView(bTypo);
 
-        //Bouton Affich
-        bAffich = new Button(this);
-        bAffich.setId(1004);
-        bAffich.setBackgroundResource(R.drawable.ic_action_visibility_off);
-        bAffich.setOnClickListener(new View.OnClickListener() {
-                                    public void onClick(View v) { affichTrajet();  } } );
-        RelativeLayout.LayoutParams pAffich = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
-        pAffich.leftMargin=largButton/3;
-        pAffich.addRule(RelativeLayout.RIGHT_OF, bTypo.getId());
-        bAffich.setLayoutParams(pAffich);
-        lL1.addView(bAffich);
+		//Bouton Affich
+		bAffich = new Button(this);
+		bAffich.setId(1004);
+		bAffich.setBackgroundResource(R.drawable.ic_action_visibility_off);
+		bAffich.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) { affichTrajet();  } } );
+		RelativeLayout.LayoutParams pAffich = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		pAffich.leftMargin=largButton/3;
+		pAffich.addRule(RelativeLayout.RIGHT_OF, bTypo.getId());
+		bAffich.setLayoutParams(pAffich);
+		lL1.addView(bAffich);
 
 
-        //Bouton Filtre
-        bFiltre = new Button(this);
-        bFiltre.setId(1005);
-        bFiltre.setBackgroundResource(R.drawable.ic_action_search);
-        bFiltre.setOnClickListener(new View.OnClickListener() {
+		//Bouton Filtre
+		bFiltre = new Button(this);
+		bFiltre.setId(1005);
+		bFiltre.setBackgroundResource(R.drawable.ic_action_search);
+		bFiltre.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				filtre();
 			}
 		});
-        RelativeLayout.LayoutParams pFiltre = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
-        pFiltre.addRule(RelativeLayout.RIGHT_OF,bAffich.getId());
-        pFiltre.leftMargin=largButton*2;
-        bFiltre.setLayoutParams(pFiltre);
-        lL1.addView(bFiltre);
+		RelativeLayout.LayoutParams pFiltre = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		pFiltre.addRule(RelativeLayout.RIGHT_OF,bAffich.getId());
+		pFiltre.leftMargin=largButton*2;
+		bFiltre.setLayoutParams(pFiltre);
+		lL1.addView(bFiltre);
 
-        //Bouton Prev
-        bPrev = new Button(this);
-        bPrev.setId(1006);
-        bPrev.setBackgroundResource(R.drawable.ic_action_previous_item);
-        bPrev.setOnClickListener(new View.OnClickListener() {
-                                  public void onClick(View v) { actionPrev(); } } );
-        RelativeLayout.LayoutParams pPrev = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
-        pPrev.leftMargin=largButton;
-        pPrev.addRule(RelativeLayout.RIGHT_OF, bFiltre.getId());
-        bPrev.setLayoutParams(pPrev);
-        lL1.addView(bPrev);
+		//Bouton Prev
+		bPrev = new Button(this);
+		bPrev.setId(1006);
+		bPrev.setBackgroundResource(R.drawable.ic_action_previous_item);
+		bPrev.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) { actionPrev(); } } );
+		RelativeLayout.LayoutParams pPrev = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		pPrev.leftMargin=largButton;
+		pPrev.addRule(RelativeLayout.RIGHT_OF, bFiltre.getId());
+		bPrev.setLayoutParams(pPrev);
+		lL1.addView(bPrev);
 
-        //Bouton Next
-        bNext = new Button(this);
-        bNext.setId(1007);
-        bNext.setBackgroundResource(R.drawable.ic_action_next_item);
-        bNext.setOnClickListener(new View.OnClickListener() {
-                                  public void onClick(View v) { actionNext(); } });
-        RelativeLayout.LayoutParams pNext = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
-        pNext.leftMargin=largButton/3;
-        pNext.addRule(RelativeLayout.RIGHT_OF, bPrev.getId());
-        bNext.setLayoutParams(pNext);
-        lL1.addView(bNext);
+		//Bouton Next
+		bNext = new Button(this);
+		bNext.setId(1007);
+		bNext.setBackgroundResource(R.drawable.ic_action_next_item);
+		bNext.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) { actionNext(); } });
+		RelativeLayout.LayoutParams pNext = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		pNext.leftMargin=largButton/3;
+		pNext.addRule(RelativeLayout.RIGHT_OF, bPrev.getId());
+		bNext.setLayoutParams(pNext);
+		lL1.addView(bNext);
 
 		//Bouton Aleat
 		bAlea = new Button(this);
@@ -296,57 +292,71 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		lL1.addView(bAlea);
 
 		//Bouton Add
-        bPlus = new Button(this);
-        bPlus.setId(1008);
-        bPlus.setBackgroundResource(R.drawable.ic_menu_add);
-        bPlus.setOnClickListener(new View.OnClickListener() {
+		bPlus = new Button(this);
+		bPlus.setId(1008);
+		bPlus.setBackgroundResource(R.drawable.ic_menu_add);
+		bPlus.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				addEmpl();
 			}
 		});
-        bPlus.setVisibility(View.INVISIBLE);
-        RelativeLayout.LayoutParams pPlus = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
-         pPlus.addRule(RelativeLayout.RIGHT_OF,bAffich.getId());
-        pPlus.leftMargin=largButton*3;
-        bPlus.setLayoutParams(pPlus);
-        lL1.addView(bPlus);
+		bPlus.setVisibility(View.INVISIBLE);
+		RelativeLayout.LayoutParams pPlus = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		pPlus.addRule(RelativeLayout.RIGHT_OF,bAffich.getId());
+		pPlus.leftMargin=largButton*3;
+		bPlus.setLayoutParams(pPlus);
+		lL1.addView(bPlus);
 
-        //Bouton Supp
-        bMoins = new Button(this);
-        bMoins.setId(1009);
-        bMoins.setBackgroundResource(R.drawable.ic_menu_remove);
-        bMoins.setOnClickListener(new View.OnClickListener() {
+		//Bouton Supp
+		bMoins = new Button(this);
+		bMoins.setId(1009);
+		bMoins.setBackgroundResource(R.drawable.ic_menu_remove);
+		bMoins.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				enlevEmpl();
 			}
 		});
-        bMoins.setVisibility(View.INVISIBLE);
-        RelativeLayout.LayoutParams pMoins = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
-        pMoins.leftMargin=largButton/3;
-        pMoins.addRule(RelativeLayout.RIGHT_OF, bPlus.getId());
-        bMoins.setLayoutParams(pMoins);
-        lL1.addView(bMoins);
+		bMoins.setVisibility(View.INVISIBLE);
+		RelativeLayout.LayoutParams pMoins = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
+		pMoins.leftMargin=largButton/3;
+		pMoins.addRule(RelativeLayout.RIGHT_OF, bPlus.getId());
+		bMoins.setLayoutParams(pMoins);
+		lL1.addView(bMoins);
 
+		//Bouton resultat
+		bRes = new Button(this);
+		bRes.setId(1020);
+		bRes.setBackgroundResource(R.drawable.ic_action_score);
+		bRes.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				saisie_resultat();
+			}
+		});
+		bRes.setVisibility(View.VISIBLE);
+		RelativeLayout.LayoutParams pRes = new RelativeLayout.LayoutParams(largButton - 5, largButton - 5);
+		pRes.leftMargin = 2 * largButton / 3;
+		pRes.addRule(RelativeLayout.RIGHT_OF, bAlea.getId());
+		bRes.setLayoutParams(pRes);
+		lL1.addView(bRes);
 
- 	    LinearLayout lL2 = new LinearLayout(this);
-	    lL2.setOrientation(LinearLayout.VERTICAL);
-	    LayoutParams Ll2Params = new LayoutParams( longTapis ,largTapis);
-        lL2.setLayoutParams(Ll2Params);
-        lL2.setY((longEcran-longTapis)/2);
-        lL2.setY((largEcran - largTapis - largButton) / 2);
+		LinearLayout lL2 = new LinearLayout(this);
+		lL2.setOrientation(LinearLayout.VERTICAL);
+		LayoutParams Ll2Params = new LayoutParams( longTapis ,largTapis);
+		lL2.setLayoutParams(Ll2Params);
+		lL2.setY((longEcran-longTapis)/2);
+		lL2.setY((largEcran - largTapis - largButton) / 2);
 
-        // Creation du "tapis"
+		// Creation du "tapis"
 		tapis = new TapisView(this,1);
 		tapis.setLMouches(LMouches);
 		tapis.setLCadres(LCadres);
 		tapis.setCouleurs(Couleurs);
-		if (Soluce==true){
+		if (Soluce) {
 			bAffich.setBackgroundResource(R.drawable.ic_action_visibility_off);
 			affich=1;
 			tapis.setAffich(1);
 			tapis.setVisuComm(1);
-		}
-		else {
+		} else {
 			affich=0;
 			bAffich.setBackgroundResource(R.drawable.ic_action_visibility_on);
 			tapis.setEmplSelect(0);
@@ -355,13 +365,31 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		}
 
 		lL2.addView(tapis);
-		lL1.setBackgroundColor(R.color.btnBackgrnd);
+		lL1.setBackgroundColor(Constantes.couleurbtnBackgrnd);
 		((LinearLayout) findViewById(R.id.Llayout01)).addView(lL1);
 		((LinearLayout) findViewById(R.id.Llayout01)).addView(lL2);
-		
+
 		//Lecture exo 0 
 		readExo(exoEnCours);
 
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		SharedPreferences.Editor sp = sharedPreferences.edit();
+		sp.putInt("Exo_en_cours", exoEnCours);
+		sp.commit();
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		exoEnCours = sharedPreferences.getInt("Exo_en_cours", exoEnCours);
+		readExo(exoEnCours);
+		drawTapis();
 
 	}
 
@@ -397,7 +425,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		else {
 			bFav.setBackgroundResource(R.drawable.ic_action_fav_full);
 		}
-		if (Soluce==true){
+		if (Soluce) {
 			bAffich.setBackgroundResource(R.drawable.ic_action_visibility_off);
 			affich=1;
 			tapis.setAffich(1);
@@ -410,7 +438,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 			tapis.setAffich(0);
 			tapis.setVisuComm(0);
 		}
-		if (Symetrie == true) {
+		if (Symetrie) {
 			Random randomGenerator = new Random();
 			inverse = randomGenerator.nextInt(5) - 1;
 			tapis.setInverse(inverse);
@@ -442,6 +470,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	    bFiltre.setVisibility(View.INVISIBLE);
 	    bPrev.setVisibility(View.INVISIBLE);
 	    bNext.setVisibility(View.INVISIBLE);
+		bRes.setVisibility(View.INVISIBLE);
 		bComm.setVisibility(View.VISIBLE);
 		bAffich.setBackgroundResource(R.drawable.ic_action_visibility_off);
 		bVerso.setVisibility(View.INVISIBLE);
@@ -457,8 +486,9 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		lock=1;
 	    bPlus.setVisibility(View.INVISIBLE);
 	    bMoins.setVisibility(View.INVISIBLE);
-	    bFiltre.setVisibility(View.VISIBLE);
-	    bPrev.setVisibility(View.VISIBLE);
+		bRes.setVisibility(View.VISIBLE);
+		bFiltre.setVisibility(View.VISIBLE);
+		bPrev.setVisibility(View.VISIBLE);
 	    bNext.setVisibility(View.VISIBLE);
 		bComm.setVisibility(View.INVISIBLE);
 		bVerso.setVisibility(View.VISIBLE);
@@ -587,11 +617,10 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
             txt.setBackgroundColor(Color.rgb(29,72,81));
             Spinner spinner = (Spinner) dialogview.findViewById(R.id.ListLivret);
 			List livrets= db.getListlivret();
-			ArrayList<String> titres= new ArrayList<String>();
+			ArrayList<String> titres = new ArrayList<>();
 			for(int i=0; i<livrets.size(); i++) {
 				titres.add(db.getTitreLivret((int) livrets.get(i)));
 			}
-			String[] array = titres.toArray(new String[0]);
 			ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, titres);
 			spinner.setAdapter(adapter);
 			spinner.setEnabled(false);
@@ -678,6 +707,40 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
     	 alert.show();
     	 tagColorFiltre();
 	 }
+
+	private void saisie_resultat() {
+		// Affichage Typologie
+		if (lock == 1) {
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("saisissez les résultats de l'exo");
+			LayoutInflater inflater = LayoutInflater.from(this);
+			// Il faudra donc un layout alert.xml sous res/layout avec un EditText ayant un id a EditText01
+			// Mais si vous etes ici, vous devez deja conna�tre tout cela
+			final View dialogview = inflater.inflate(R.layout.note_exo, null);
+			//AlertDialog
+			alert.setView(dialogview);
+			((EditText) dialogview.findViewById(R.id.alertScore)).requestFocus();
+			alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int idx) {
+					int score = Integer.parseInt(((EditText) dialogview.findViewById(R.id.alertScore)).getText().toString());
+					int rgp;
+					if (((CheckBox) dialogview.findViewById(R.id.alertRegroup)).isChecked())
+						rgp = 1;
+					else rgp = 0;
+					db.saveResult(exo.getId(), score, rgp);
+				}
+			});
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int idx) {
+				}
+			});
+			alert.show();
+		}
+	}
+
+	private void affich_resultat() {
+
+	}
 
 	private void drawTapis() {
 		tapis.setLMouches(LMouches);

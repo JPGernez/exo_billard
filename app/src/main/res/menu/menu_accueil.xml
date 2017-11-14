@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:textColor="@color/textColor2"
+    android:popupBackground="@color/btnBackgrnd2">
+
+    <item
+        android:id="@+id/options"
+        android:showAsAction="ifRoom|withText"
+        android:title="Options" />
+</menu>

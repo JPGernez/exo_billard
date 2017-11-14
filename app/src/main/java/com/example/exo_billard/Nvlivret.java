@@ -26,7 +26,7 @@ public class Nvlivret extends Activity {
 
         db = new SqlBillardHelper(this);
         Bundle extras = getIntent().getExtras();
-        EditText txt = null;
+        EditText txt;
         if (extras != null) {
 
             txt= (EditText) findViewById(R.id.titreNvLivret);
@@ -47,7 +47,7 @@ public class Nvlivret extends Activity {
     public void validNvLivret(View v) {
 
         Log.d("nvlivret", "1");
-        EditText txt = null;
+        EditText txt;
         txt= (EditText) findViewById(R.id.titreNvLivret);
         livret.setTitre(txt.getText().toString());
         txt = (EditText) findViewById(R.id.auteurNvLivret);
