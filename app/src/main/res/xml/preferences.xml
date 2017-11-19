@@ -6,7 +6,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
-           <ListPreference
+        <CheckBoxPreference
+            android:key="tapisAlea"
+            android:title="Couleurs du tapis aléatoires"
+            android:summaryOn="Les couleurs seront tirées au sort à l'ouverture de l'application."
+            android:summaryOff="La couleur sera toujours celle choisit ci-dessous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true" />
+        <ListPreference
             android:key="prefCouleur"
             android:dialogTitle="Couleur du tapis"
             android:entries="@array/liste_couleurs_fr"
@@ -39,6 +47,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
+        <CheckBoxPreference
+            android:key="prefKeepon"
+            android:title="Garder l'écran allumé lors de la visu des exos"
+            android:summaryOn="L'écran restera allumé"
+            android:summaryOff="L'écran s'éteindra selon les parametres du téléphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false" />
 
         <CheckBoxPreference
             android:key="prefSoluce"

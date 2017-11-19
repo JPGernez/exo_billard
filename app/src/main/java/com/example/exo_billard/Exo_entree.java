@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
     Exo exo1 = new Exo();
     Exo exo2 = new Exo();
     Exo exo3 = new Exo();
+    Exo exovide = new Exo();
     public int nbLiv = 0;
     private int liv = -2;
     private int premExo = 0;
@@ -133,32 +135,13 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
         ((LinearLayout) findViewById(R.id.emplExo3)).addView(lL4);
         //Lecture exo 0
         readLivret();
-        readExo();
         TableRow tap=  (TableRow) findViewById(R.id.tapis3);
-
         tap.setOnTouchListener(this);
-        //tap.setOnTouchListener(this);
+
         spinner = (Spinner) findViewById(R.id.titre);
         addListenerOnSpinnerItemSelection();
 
-/*
-        ImageView bNextExo = (ImageView) findViewById(R.id.me_exonext);
-        bNextExo.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                  premExo = premExo + 3;
-                if ((premExo + 1) > lExo.size()) premExo = 0;
-                 readExo();
-            }
-        });
-        ImageView bPrevExo = (ImageView) findViewById(R.id.me_exoprev);
-        bPrevExo.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                 premExo = premExo - 3;
-                if ((premExo < 0)) premExo = (Math.round((lExo.size() - 1) / 3) * 3);
-                 readExo();
-            }
-        });
-*/
+
         ImageView bOptions = (ImageView) findViewById(R.id.menuOptions);
         bOptions.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -170,9 +153,10 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
             }
         });
 
+
            majListLivret();
            majListExo();
-
+        readExo();
        }
 
     @Override
@@ -274,8 +258,8 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
      }
     ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, titres);
     spinner.setAdapter(adapter);
-    spinner.setSelection(liv+1);
-}
+      spinner.setSelection(liv + 2);
+  }
 
     private void changeLivret() {
         liv = spinner.getSelectedItemPosition() - 2;
@@ -317,6 +301,58 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
             tapis3.Draw(canvas);
             tapis3.mSurfaceHolder.unlockCanvasAndPost(canvas);
         }
+
+        int couleurButton;
+        int couleurText;
+        int couleurBack;
+        int couleurDesc;
+
+
+        if ("green".equals(Couleurs.intern())) {
+            couleurButton = Constantes.couleurTapisG;
+            couleurDesc = Constantes.couleurBackG;
+            //couleurText = Constantes.couleurMoucheG;
+            couleurBack = Constantes.couleurBackG;
+
+        } else if ("blue".equals(Couleurs.intern())) {
+            couleurButton = Constantes.couleurTapisB;
+            couleurDesc = Constantes.couleurBackB;
+            //couleurText = Constantes.couleurMoucheB;
+            couleurBack = Constantes.couleurBackB;
+        } else if ("red".equals(Couleurs.intern())) {
+            couleurButton = Constantes.couleurTapisR;
+            couleurDesc = Constantes.couleurBackR;
+            //couleurText = Constantes.couleurMoucheR;
+            couleurBack = Constantes.couleurBackR;
+        } else {
+            couleurButton = Constantes.couleurTapisNB;
+            couleurDesc = Constantes.couleurBackNB;
+            //couleurText = Constantes.couleurMoucheNB;
+            couleurBack = Constantes.couleurBackNB;
+        }
+        LinearLayout l = (LinearLayout) findViewById(R.id.LlayoutMenu);
+        l.setBackgroundColor(couleurBack);
+
+        Spinner s = (Spinner) findViewById(R.id.titre);
+        s.setBackgroundColor(couleurButton);
+        //   ((TextView) s.getChildAt(0)).setTextColor(couleurText);
+
+        TextView t = (TextView) findViewById(R.id.desc);
+        t.setBackgroundColor(couleurDesc);
+        //       t.setTextColor(couleurText);
+
+        TextView t1 = (TextView) findViewById(R.id.desc1);
+        t1.setBackgroundColor(couleurDesc);
+        //     t1.setTextColor(couleurText);
+
+        TextView t2 = (TextView) findViewById(R.id.desc2);
+        t2.setBackgroundColor(couleurDesc);
+        //   t2.setTextColor(couleurText);
+
+        TextView t3 = (TextView) findViewById(R.id.desc3);
+        t3.setBackgroundColor(couleurDesc);
+        // t3.setTextColor(couleurText);
+
     }
 
     private void readLivret() {
@@ -342,23 +378,37 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
     }
 
     private void readExo() {
-
+        Log.d("livret", String.valueOf(liv));
+        Log.d("taille livret", String.valueOf(lExo.size()));
        if (lExo.size() >= premExo + 1) {
+           Log.d("lectureExo1", String.valueOf(premExo + 1));
             tapis.setVisibility(View.VISIBLE);
            this.findViewById(R.id.desc1).setVisibility(View.VISIBLE);
-            readExo1(premExo);
+           readExo1(premExo);
         } else {
             if (liv > -1 ) {
+                Log.d("lectureExo2", String.valueOf(premExo + 1));
+
                 tapis.setVisibility(View.VISIBLE);
+                tapis.setAffich(affich);
+                tapis.setBille1(exovide.getB(0));
+                tapis.setBille2(exovide.getB(1));
+                tapis.setBille3(exovide.getB(2));
+                tapis.setVisuComm(0);
+                readExo1(-1);
                 this.findViewById(R.id.desc1).setVisibility(View.VISIBLE);
                 ((TextView) this.findViewById(R.id.desc1)).setText("Cliquer sur le tapis pour commencer");
             }
            if (liv == -2 ) {
+               Log.d("lectureExo3", String.valueOf(premExo + 1));
+
                tapis.setVisibility(View.INVISIBLE);
                this.findViewById(R.id.desc1).setVisibility(View.VISIBLE);
                ((TextView) this.findViewById(R.id.desc1)).setText("Commencer par créer un livret");
            }
            if (liv == -1 ) {
+               Log.d("lectureExo4", String.valueOf(premExo + 1));
+
                tapis.setVisibility(View.INVISIBLE);
                this.findViewById(R.id.desc1).setVisibility(View.VISIBLE);
                ((TextView) this.findViewById(R.id.desc1)).setText("Pas d'exercice favori");
@@ -392,15 +442,15 @@ private void readPref() {
     }
 
     private void readExo1(int numExo) {
-
-        exo1 = db.getExo(lExo.get(numExo));
-        tapis.setAffich(affich);
-        tapis.setBille1(exo1.getB(0));
-        tapis.setBille2(exo1.getB(1));
-        tapis.setBille3(exo1.getB(2));
-        tapis.setVisuComm(0);
-        ((TextView) this.findViewById(R.id.desc1)).setText("  Exo " + (numExo + 1) + "\\" + lExo.size() + "\r\n" + exo1.getComment());
-
+        if (numExo > -1) {
+            exo1 = db.getExo(lExo.get(numExo));
+            tapis.setAffich(affich);
+            tapis.setBille1(exo1.getB(0));
+            tapis.setBille2(exo1.getB(1));
+            tapis.setBille3(exo1.getB(2));
+            tapis.setVisuComm(0);
+            ((TextView) this.findViewById(R.id.desc1)).setText("  Exo " + (numExo + 1) + "\\" + lExo.size() + "\r\n" + exo1.getComment());
+        }
     }
 
     private void readExo2(int numExo) {
@@ -428,11 +478,6 @@ private void readPref() {
     }
 
 
-    private void copyLivret(long livret_sel) {
-
-        majListLivret();
-
-    }
 
     private void suppLivret() {
 
@@ -474,7 +519,7 @@ private void readPref() {
                 intent.putExtra("titre", "");
                 intent.putExtra("auteur", "");
                 intent.putExtra("comm", "");
-                int result  = 0;
+                int result = 1;
                 startActivityForResult(intent,result);
                 return true;
             case R.id.modLivret:
@@ -486,7 +531,7 @@ private void readPref() {
                     intent2.putExtra("comm", Liv.getComment());
                     intent2.putExtra("mod", 1);
                     intent2.putExtra("liv_id",Liv.getId());
-                    int result3  = 0;
+                    int result3 = 1;
                     startActivityForResult(intent2,result3);
                 }
 
@@ -509,6 +554,8 @@ private void readPref() {
                 final View dialogview = inflater.inflate(R.layout.importlivret,null);
                 //AlertDialog
                 alert.setView(dialogview);
+
+
                 File myDir = new File(Environment.getExternalStorageDirectory(), "ExoBillard");
                 TextView txt = (TextView) dialogview.findViewById(R.id.infoImport);
                 txt.setText("Les fichiers eBi1 et eBi2 doivent se trouver sous " + myDir.toString());
@@ -533,7 +580,6 @@ private void readPref() {
                 if (i>0 ) {
                     ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, titres);
                     spinner.setAdapter(adapter);
-                    spinner.setBackgroundColor(Color.rgb(29,72,81));
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int idx) {
 
@@ -564,9 +610,9 @@ private void readPref() {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //on regarde quelle Activity a répondu
+        majListLivret();
         readPref();
         drawTapis();
-
 
     }
 

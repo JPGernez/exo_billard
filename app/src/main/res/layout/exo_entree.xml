@@ -1,41 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout android:id="@+id/LlayoutMenu"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:background="@color/backgrd">
-
+    android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/LlayoutMenu"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        >
+        android:orientation="horizontal">
+
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:background="@drawable/ic_launcher"
-            android:layout_weight="5"/>
+            android:layout_weight="1"
+            android:background="@drawable/ic_launcher" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/titre_app"
-            android:id="@+id/textView"
-            android:layout_weight="98"/>
+            android:layout_weight="98"
+            android:text="@string/titre_app" />
 
         <ImageView
+            android:id="@+id/menuOptions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:background="@drawable/ic_action_overflow"
-            android:id="@+id/menuOptions"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:background="@drawable/ic_action_overflow" />
     </LinearLayout>
 
     <ScrollView
@@ -62,17 +56,12 @@
 
                 <Spinner
                     android:id="@+id/titre"
-                    style="@android:style/Widget.DeviceDefault.Spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/btnBackgrnd"
-                    android:isScrollContainer="false"
                     android:minHeight="30dp"
-                    android:popupBackground="@color/btnBackgrnd2"
-                    android:scrollbarAlwaysDrawHorizontalTrack="false"
-                    android:scrollbarAlwaysDrawVerticalTrack="false"
-                    android:splitMotionEvents="false"
-                    android:textColor="@color/textColor2" />
+                    android:popupBackground="@android:color/background_dark"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
 
             <LinearLayout

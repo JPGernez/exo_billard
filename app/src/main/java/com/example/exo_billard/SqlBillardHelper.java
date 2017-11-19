@@ -101,13 +101,25 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
             + SCORE_RGP + " integer, "
             + SCORE_DATE + " integer ); ";
 
-
+    //table match
+    private static final String TABLE_MATCH = "MATCH";
+    private static final String MATCH_ADV = "adversaire";
+    private static final String MATCH_REP = "NbCoups";
+    private static final String MATCH_SCORE = "Score";
+    private static final String MATCH_SCOREADV = "ScoreAdv";
+    private static final String MATCH_DATE = "Date";
+    private static final String MATCH_CREATE = "create table " + TABLE_MATCH
+            + " (" + MATCH_ADV + " text, "
+            + MATCH_REP + " integer, "
+            + MATCH_SCORE + " integer, "
+            + MATCH_SCOREADV + " integer, "
+            + MATCH_DATE + " integer ); ";
 
 	//CREATION DB
 //	  public static final String DATABASE_CREATE = LIV_CREATE + " "+ EXO_CREATE + " " + EMPL_CREATE; 
 //	  public static final String DATABASE_CREATE =EXO_CREATE +" "+ EMPL_CREATE; 
 	private static final String DATABASE_NAME = "ExoBillard.db";
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
 
 	public SqlBillardHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -125,6 +137,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		database.execSQL(EMPL_CREATE);
 		database.execSQL(TAG_CREATE);
         database.execSQL(SCORE_CREATE);
+        database.execSQL(SCORE_CREATE);
+        database.execSQL(MATCH_CREATE);
 
 	}
 
@@ -133,7 +147,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		Log.w(SqlBillardHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
-        db.execSQL(SCORE_CREATE);
+        db.execSQL(MATCH_CREATE);
     }
 
 	// ------------------------ "EXO" table methods ----------------//
@@ -461,6 +475,19 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		}
 		return empl_id;
 	}
+
+    public void saveMatch(String adv, int rep, int score, int scoreadv) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues res = new ContentValues();
+        res.put(MATCH_ADV, adv);
+        res.put(MATCH_REP, rep);
+        res.put(MATCH_SCORE, score);
+        res.put(MATCH_SCOREADV, scoreadv);
+        res.put(MATCH_DATE, System.currentTimeMillis());
+        // insert row
+        db.insert(TABLE_MATCH, null, res);
+    }
 
     public void saveResult(int exoId, int score, int regroup) {
 

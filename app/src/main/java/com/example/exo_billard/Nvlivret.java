@@ -1,11 +1,16 @@
 package com.example.exo_billard;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 public class Nvlivret extends Activity {
 
@@ -14,16 +19,17 @@ public class Nvlivret extends Activity {
     private int mod =0;
     private int liv_id=0;
 
+    SharedPreferences sharedPreferences;
+    public String Couleurs = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Passer la fen�tre en fullscreen == cacher la barre de notification
-       // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //getWindow().setFlags(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-                setContentView(R.layout.nvlivret);
-
+        setContentView(R.layout.nvlivret);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        readPref();
+        drawWindow();
         db = new SqlBillardHelper(this);
         Bundle extras = getIntent().getExtras();
         EditText txt;
@@ -41,7 +47,44 @@ public class Nvlivret extends Activity {
         Log.d("Livret mod", String.valueOf(mod));
     }
 
+    private void readPref() {
 
+        Couleurs = sharedPreferences.getString("prefCouleur", "blue");
+    }
+
+    private void drawWindow() {
+        int couleurButton;
+        int couleurText;
+        int couleurBack;
+
+        if ("green".equals(Couleurs.intern())) {
+            couleurButton = Constantes.couleurTapisG;
+            couleurText = Constantes.couleurMoucheG;
+            couleurBack = Constantes.couleurBackG;
+        } else if ("blue".equals(Couleurs.intern())) {
+            couleurButton = Constantes.couleurTapisB;
+            couleurText = Constantes.couleurMoucheB;
+            couleurBack = Constantes.couleurBackB;
+        } else if ("red".equals(Couleurs.intern())) {
+            couleurButton = Constantes.couleurTapisR;
+            couleurText = Constantes.couleurMoucheR;
+            couleurBack = Constantes.couleurBackR;
+        } else {
+            couleurButton = Constantes.couleurTapisNB;
+            couleurText = Constantes.couleurMoucheNB;
+            couleurBack = Constantes.couleurBackNB;
+        }
+
+        Button b1 = (Button) findViewById(R.id.cancelNvLivret);
+        b1.setBackgroundColor(couleurButton);
+        //b1.setTextColor(couleurText);
+        Button b2 = (Button) findViewById(R.id.validNvLivret);
+        b2.setBackgroundColor(couleurButton);
+
+        ScrollView t = (ScrollView) findViewById(R.id.nvl_Back);
+        t.setBackgroundColor(couleurBack);
+
+    }
     // click sur un element du menu d entree
 
     public void validNvLivret(View v) {

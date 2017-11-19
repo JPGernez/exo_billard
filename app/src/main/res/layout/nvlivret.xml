@@ -2,14 +2,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/backgrd"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:id="@+id/nvl_Back">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/backgrd"
         android:layout_margin="5dp">
 
 
@@ -65,7 +64,6 @@
         android:text="Cancel"
         android:id="@+id/cancelNvLivret"
         android:layout_weight="1"
-        android:background="@color/btnBackgrnd"
         android:layout_margin="10dp"
         android:onClick="cancelNvLivret"/>
 
@@ -76,7 +74,6 @@
         android:text="Valider"
         android:id="@+id/validNvLivret"
         android:layout_weight="1"
-        android:background="@color/btnBackgrnd"
         android:layout_margin="10dp"
         android:onClick="validNvLivret"
         android:tag="valid"/>

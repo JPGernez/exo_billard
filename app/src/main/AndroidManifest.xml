@@ -18,8 +18,8 @@
         <activity
             android:name=".Accueil"
             android:screenOrientation="landscape"
-            android:label="@string/app_name">
-
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateUnchanged|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -33,7 +33,7 @@
             android:screenOrientation="landscape">
 
         </activity>
-            <activity
+        <activity
                 android:name=".ExoView"
                 android:screenOrientation="landscape"
                 android:windowSoftInputMode="stateUnchanged|adjustResize"

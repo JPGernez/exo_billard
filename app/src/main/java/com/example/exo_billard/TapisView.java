@@ -86,6 +86,7 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 	public int couleurMouche = Constantes.couleurMoucheB;
 	public int couleurBande = Constantes.couleurBandeB;
 	public int couleurLigne = Constantes.couleurLigneB;
+	public int couleurSel = Constantes.couleurSelB;
 
 	public void setLMouches(String lm) {
 		LMouches = lm;
@@ -103,24 +104,28 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 			couleurLigne = Constantes.couleurLigneG;
 			couleurTapis = Constantes.couleurTapisG;
 			couleurMouche = Constantes.couleurMoucheG;
+			couleurSel = Constantes.couleurSelG;
 		} else if ("blue".equals(Couleurs.intern())) {
 			couleurBande = Constantes.couleurBandeB;
 			couleurRadar = Constantes.couleurRadarB;
 			couleurLigne = Constantes.couleurLigneB;
 			couleurTapis = Constantes.couleurTapisB;
 			couleurMouche = Constantes.couleurMoucheB;
+			couleurSel = Constantes.couleurSelB;
 		} else if ("red".equals(Couleurs.intern())) {
 			couleurBande = Constantes.couleurBandeR;
 			couleurRadar = Constantes.couleurRadarR;
 			couleurLigne = Constantes.couleurLigneR;
 			couleurTapis = Constantes.couleurTapisR;
 			couleurMouche = Constantes.couleurMoucheR;
+			couleurSel = Constantes.couleurSelR;
 		} else {
 			couleurBande = Constantes.couleurBandeNB;
 			couleurRadar = Constantes.couleurRadarNB;
 			couleurLigne = Constantes.couleurLigneNB;
 			couleurTapis = Constantes.couleurTapisNB;
 			couleurMouche = Constantes.couleurMoucheNB;
+			couleurSel = Constantes.couleurSelNB;
 		}
 	}
 
@@ -315,13 +320,16 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
                         if  (numBille != billeSelect) {
                             mPaint.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
                         }
+						mPaint.setShadowLayer(3, 3, 3, Color.BLACK);
 						pCanvas.drawLine(x_prec * longSurf / 100 + largBande, y_prec * largSurf / 100 + largBande, x * longSurf / 100 + largBande, y * largSurf / 100 + largBande, mPaint);
                         mPaint.setPathEffect(null);
+						mPaint.setShadowLayer(0, 0, 0, Color.GRAY);
 					}
 				    // si la bille est selectionnee affichage des marqueurs de placement
 				    if  (numBille == billeSelect  && numEmpl==emplSelect) {
 						mPaint.setStrokeWidth(largeur/400);
-						mPaint.setColor(couleurBande);
+						mPaint.setColor(couleurSel);
+						mPaint.setShadowLayer(3, 3, 3, Color.BLACK);
 
 						mPaint.setAlpha(200);
 						pCanvas.drawLine(x*longSurf/100+largBande, largBande, x*longSurf/100+largBande, largSurf+largBande, mPaint);
@@ -332,7 +340,8 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 						pCanvas.drawCircle((x*longSurf/100)+largBande, (y*largSurf/100)+largBande, rayon*7*largSurf/100, mPaint);
 						mPaint.setAlpha(0);
 						mPaint.setStrokeWidth(largeur/200);
-						
+						mPaint.setShadowLayer(0, 0, 0, Color.GRAY);
+
 				    }
 				    // Stockage des coordonees de l'emplacement pour dessin de la prochaine trajectoire
 					x_prec=x;
@@ -475,7 +484,7 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 
 			mPaint.setStyle(Paint.Style.FILL);
 			mPaint.setTextSize(largSurf / 20 );
-			mPaint.setColor(couleurBande);
+			mPaint.setColor(Color.WHITE);
 			mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 			pCanvas.drawCircle((xComm * longSurf / 100) + largBande, (yComm * largSurf / 100) + largBande, largBande / 4, mPaint);
 			if (comment.contains("\n")) {
@@ -518,7 +527,7 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 			this.setLongClickable(true);
 			this.setOnTouchListener(new OnTouchListener() {
 				public boolean onTouch(View myView, MotionEvent event) {
-				 float x=0;
+					float x = 0;
 				float y=0;
 				 int action = event.getActionMasked();
 			     //Si touche ecran alors on regarde si une bille est selectionnee

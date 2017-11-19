@@ -51,12 +51,14 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
     int livret=-1;
 	int inverse=0;
 	int fav =0;
+	int rallumage = 0;
 
 	public String LMouches = "";
 	public String LCadres = "";
 	public String Couleurs = "";
 	public boolean Soluce=true;
 	public boolean Symetrie=true;
+	public boolean Keepon = false;
 
 	// creattion d un nouvel exo
 	Exo exo = new Exo();
@@ -90,27 +92,37 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			//---------Récupère informations------------
 			livret = extras.getInt("livret_sel");
 		} else livret=-1;
 		tags.creaListMotsCles(1);
-
+		if (savedInstanceState != null) {
+			tags = (MotsCles) savedInstanceState.getSerializable("tag");
+		}
 		db = new SqlBillardHelper(this);
 		// mAj Liste exo
+		if (savedInstanceState != null) {
+			rallumage = 1;
+			affich = savedInstanceState.getInt("sol_sel");
+			inverse = savedInstanceState.getInt("sym_sel");
+		}
 
 		sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		readPref();
 
 		majListExo();
-		if (extras != null) {
-			if (extras.getInt("exo_sel")>=0) {
-				if (listExo.contains(extras.getInt("exo_sel")))
-					exoEnCours = listExo.indexOf(extras.getInt("exo_sel"));
-			} else exoEnCours=0;
+		int ec;
+		if (savedInstanceState != null) {
+			ec = savedInstanceState.getInt("exo_sel");
+		} else if (extras != null) {
+			ec = extras.getInt("exo_sel");
+		} else ec = 0;
+		exoEnCours = 0;
+		if (ec >= 0) {
+			if (listExo.contains(ec))
+				exoEnCours = listExo.indexOf(ec);
+		}
 			//---------Récupère informations------------
 
-		} else exoEnCours=0;
-		Log.d("Affichage Exo", String.valueOf(exoEnCours));
 
 		// Passer la fen�tre en fullscreen == cacher la barre de notification
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -133,7 +145,6 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		RelativeLayout.LayoutParams lL1Params = new RelativeLayout.LayoutParams(longEcran,largButton);
 		lL1Params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 		lL1.setLayoutParams(lL1Params);
-		lL1.setBackgroundColor(Constantes.couleurtext);
 
 		//Bouton Menus
 		bOptions = new Button(this);
@@ -351,47 +362,28 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		tapis.setLMouches(LMouches);
 		tapis.setLCadres(LCadres);
 		tapis.setCouleurs(Couleurs);
-		if (Soluce) {
-			bAffich.setBackgroundResource(R.drawable.ic_action_visibility_off);
-			affich=1;
-			tapis.setAffich(1);
-			tapis.setVisuComm(1);
-		} else {
-			affich=0;
-			bAffich.setBackgroundResource(R.drawable.ic_action_visibility_on);
-			tapis.setEmplSelect(0);
-			tapis.setAffich(0);
-			tapis.setVisuComm(0);
-		}
+
 
 		lL2.addView(tapis);
-		lL1.setBackgroundColor(Constantes.couleurbtnBackgrnd);
-		((LinearLayout) findViewById(R.id.Llayout01)).addView(lL1);
-		((LinearLayout) findViewById(R.id.Llayout01)).addView(lL2);
+		LinearLayout lL = (LinearLayout) findViewById(R.id.EV_Llayout);
+
+		lL.addView(lL1);
+		lL.addView(lL2);
+		lL.setBackgroundColor(Constantes.couleurBack);
 
 		//Lecture exo 0 
 		readExo(exoEnCours);
-
-
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-		SharedPreferences.Editor sp = sharedPreferences.edit();
-		sp.putInt("Exo_en_cours", exoEnCours);
-		sp.commit();
-
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putInt("exo_sel", listExo.get(exoEnCours));
+		outState.putSerializable("tag", tags);
+		outState.putInt("sym_sel", inverse);
+		outState.putInt("sol_sel", affich);
+		super.onSaveInstanceState(outState);
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		exoEnCours = sharedPreferences.getInt("Exo_en_cours", exoEnCours);
-		readExo(exoEnCours);
-		drawTapis();
-
-	}
 
 	private void majListExo() {
 		// Recup donn�es Exos.
@@ -406,8 +398,17 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		LCadres = sharedPreferences.getString("prefCadres", "plein");
 		Soluce = sharedPreferences.getBoolean("prefSoluce", true);
 		Symetrie = sharedPreferences.getBoolean("prefSymetrie", true);
+		Keepon = sharedPreferences.getBoolean("prefEcranOn", false);
+		if (Keepon) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+
 	}
 	private void readExo(int numExo) {
+
+		Log.d("load1", String.valueOf(numExo));
 
         if (nbExo==0) {
 			exo = new Exo();
@@ -425,7 +426,18 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		else {
 			bFav.setBackgroundResource(R.drawable.ic_action_fav_full);
 		}
-		if (Soluce) {
+		if (rallumage == 1) {
+			if (affich == 1) {
+				bAffich.setBackgroundResource(R.drawable.ic_action_visibility_off);
+				tapis.setAffich(1);
+				tapis.setVisuComm(1);
+			} else {
+				bAffich.setBackgroundResource(R.drawable.ic_action_visibility_on);
+				tapis.setEmplSelect(0);
+				tapis.setAffich(0);
+				tapis.setVisuComm(0);
+			}
+		} else if (Soluce) {
 			bAffich.setBackgroundResource(R.drawable.ic_action_visibility_off);
 			affich=1;
 			tapis.setAffich(1);
@@ -438,7 +450,9 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 			tapis.setAffich(0);
 			tapis.setVisuComm(0);
 		}
-		if (Symetrie) {
+		if (rallumage == 1) {
+			tapis.setInverse(inverse);
+		} else if (Symetrie) {
 			Random randomGenerator = new Random();
 			inverse = randomGenerator.nextInt(5) - 1;
 			tapis.setInverse(inverse);
@@ -446,7 +460,6 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 			inverse = 0;
 			tapis.setInverse(inverse);
 		}
-		tapis.setInverse(inverse);
 		tapis.setBille1(exo.getB(0));
 		tapis.setBille2(exo.getB(1));
 		tapis.setBille3(exo.getB(2));
@@ -454,6 +467,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		tapis.setXComm(exo.getXComm());
 		tapis.setYComm(exo.getYComm());
 		drawTapis();
+		rallumage = 0;
 	}
     
 	////////////
@@ -686,7 +700,8 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	private void filtre()
 	{
 	// Affichage Typologie
-         filtre=1;
+		rallumage = 1;
+		filtre=1;
      	 AlertDialog.Builder alert = new AlertDialog.Builder(this);  
          alert.setTitle("Filtrer les exercices");  
          //LayoutInflater
@@ -751,7 +766,6 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 			tapis.Draw(canvas);
 			tapis.mSurfaceHolder.unlockCanvasAndPost(canvas);
 		}
-
 	}
 
 	// Affichage du trajet des billes (solution) ou seulement du premier emplacement

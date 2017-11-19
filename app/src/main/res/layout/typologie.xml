@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/btnBackgrndSel">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,196 +11,207 @@
 
         >
 
-    <TextView
-        android:id="@+id/typBase"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="20"
-        android:clickable="true"
-        android:gravity="center_horizontal"
-        android:tag="CBase"
-        android:onClick="clickTypo"
-        android:text="@string/typBase"
-        android:textSize="12dip"
-        />
-     <TextView
-        android:id="@+id/typCoupNat"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:clickable="true"
-        android:layout_weight="20"
-        android:tag="CNat"
-        android:onClick="clickTypo"
-        android:text="@string/typCoupNat"
-        android:textSize="12dip" />
         <TextView
-        android:id="@+id/typPlein"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:clickable="true"
-        android:layout_weight="20"
-        android:tag="CPlein"
-        android:onClick="clickTypo"
-        android:text="Plein"
-        android:textSize="12dip" />
+            android:id="@+id/typBase"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CBase"
+            android:text="@string/typBase"
+            android:textSize="12dip" />
+
         <TextView
-        android:id="@+id/typFinesse"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:clickable="true"
-        android:layout_weight="20"
-        android:tag="CFinesse"
-        android:onClick="clickTypo"
-        android:text="Finesse"
-        android:textSize="12dip" />
+            android:id="@+id/typCoupNat"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CNat"
+            android:text="@string/typCoupNat"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typPlein"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CPlein"
+            android:text="Plein"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typFinesse"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CFinesse"
+            android:text="Finesse"
+            android:textSize="12dip" />
     </LinearLayout>
-
- <LinearLayout
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:layout_gravity="center_horizontal"
-     android:layout_marginTop="10dp" >
-
-     <TextView
-         android:id="@+id/typEffet"
-         android:layout_width="0dip"
-         android:layout_height="wrap_content"
-         android:layout_weight="20"
-         android:clickable="true"
-         android:gravity="center_horizontal"
-         android:tag="CEffet"
-         android:onClick="clickTypo"
-         android:text="@string/typEffet"
-         android:textSize="12dip"/>
-     <TextView
-         android:id="@+id/typCoule"
-         android:layout_width="0dip"
-         android:layout_height="wrap_content"
-         android:gravity="center_horizontal"
-         android:clickable="true"
-         android:layout_weight="20"
-         android:tag="CCoule"
-         android:onClick="clickTypo"
-         android:text="@string/typCoule"
-         android:textSize="12dip"/>
-    <TextView
-        android:id="@+id/typRetro"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="20"
-        android:clickable="true"
-        android:gravity="center_horizontal"
-        android:tag="CRetro"
-        android:onClick="clickTypo"
-        android:text="@string/typRetro"
-        android:textSize="12dip"/>
-
-     <TextView
-         android:id="@+id/typMasse"
-         android:layout_width="0dip"
-         android:layout_height="wrap_content"
-         android:gravity="center_horizontal"
-         android:clickable="true"
-         android:layout_weight="20"
-         android:tag="CMasse"
-         android:onClick="clickTypo"
-         android:text="@string/typMasse"
-         android:textSize="12dip"/>
- </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp" >
-
-    <TextView
-        android:id="@+id/typRappel"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:clickable="true"
- 	    android:layout_weight="20"
-        android:tag="CRappel"
-        android:onClick="clickTypo"
-        android:text="@string/typRappel"
-        android:textSize="12dip"/>
-    <TextView
-        android:id="@+id/typPlacement"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_weight="20"
-        android:gravity="center_horizontal"
-        android:tag="CPlace"
-        android:onClick="clickTypo"
-        android:text="@string/typPlacement"
-        android:textSize="12dip"/>
-            <TextView
-                android:id="@+id/typBande"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:clickable="true"
-                android:layout_weight="20"
-                android:tag="CBande"
-                android:onClick="clickTypo"
-                android:text="@string/typBande"
-                android:textSize="12dip"/>
-            <TextView
-        android:id="@+id/typ3Bandes"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:clickable="true"
- 	    android:layout_weight="20"
-         android:tag="C3Bandes"
-         android:onClick="clickTypo"
- 	    android:text="@string/typ3Bandes"
-         android:textSize="12dip"/>
-     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp">
-    <TextView
-        android:id="@+id/typPret"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:clickable="true"
-        android:layout_weight="20"
-        android:tag="CPret"
-        android:onClick="clickTypo"
-        android:text="Bille de pret"
-        android:textSize="12dip" />
+
         <TextView
-        android:id="@+id/typEchelle"
-        android:layout_width="0dip"
+            android:id="@+id/typEffet"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CEffet"
+            android:text="@string/typEffet"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typCoule"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CCoule"
+            android:text="@string/typCoule"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typRetro"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CRetro"
+            android:text="@string/typRetro"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typMasse"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CMasse"
+            android:text="@string/typMasse"
+            android:textSize="12dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:clickable="true"
-        android:layout_weight="20"
-        android:tag="CEchelle"
-        android:onClick="clickTypo"
-        android:text="@string/typEchelle"
-        android:textSize="12dip"/>
-    <TextView
-        android:id="@+id/typBarrage"
-        android:layout_width="0dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/typRappel"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CRappel"
+            android:text="@string/typRappel"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typPlacement"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CPlace"
+            android:text="@string/typPlacement"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typBande"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CBande"
+            android:text="@string/typBande"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typ3Bandes"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="C3Bandes"
+            android:text="@string/typ3Bandes"
+            android:textSize="12dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="20"
-        android:clickable="true"
-        android:gravity="center_horizontal"
-        android:tag="CBarrage"
-        android:onClick="clickTypo"
-        android:text="Barrage"
-        android:textSize="12dip" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/typPret"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CPret"
+            android:text="Bille de pret"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typEchelle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CEchelle"
+            android:text="@string/typEchelle"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/typBarrage"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:onClick="clickTypo"
+            android:tag="CBarrage"
+            android:text="Barrage"
+            android:textSize="12dip" />
+
         <TextView
             android:id="@+id/typFolklo"
             android:layout_width="0dip"
@@ -209,19 +219,18 @@
             android:layout_weight="20"
             android:clickable="true"
             android:gravity="center_horizontal"
-            android:tag="CFolklo"
             android:onClick="clickTypo"
+            android:tag="CFolklo"
             android:text="Folklorique"
             android:textSize="12dip" />
-</LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="30dp">
-    </LinearLayout>
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="2dp"></LinearLayout>
 
 
 </LinearLayout>
