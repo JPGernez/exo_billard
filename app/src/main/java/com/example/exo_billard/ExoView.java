@@ -59,6 +59,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	public boolean Soluce=true;
 	public boolean Symetrie=true;
 	public boolean Keepon = false;
+	public boolean BonusTest = false;
 
 	// creattion d un nouvel exo
 	Exo exo = new Exo();
@@ -84,6 +85,9 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
     private View vTypo=null;
     private int filtre=0;
 	SharedPreferences  sharedPreferences ;
+	long seance = -1;
+	int NbTent = 3;
+
 
 	@SuppressLint("ResourceType")
 	@Override
@@ -93,7 +97,12 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			livret = extras.getInt("livret_sel");
-		} else livret=-1;
+			seance = extras.getLong("seance");
+		} else {
+			livret = -1;
+			seance = -1;
+		}
+		Log.d("seance Id", String.valueOf(seance));
 		tags.creaListMotsCles(1);
 		if (savedInstanceState != null) {
 			tags = (MotsCles) savedInstanceState.getSerializable("tag");
@@ -111,18 +120,20 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 
 		majListExo();
 		int ec;
+
 		if (savedInstanceState != null) {
 			ec = savedInstanceState.getInt("exo_sel");
-		} else if (extras != null) {
+		} else if (extras != null & seance <= 0) {
 			ec = extras.getInt("exo_sel");
 		} else ec = 0;
 		exoEnCours = 0;
 		if (ec >= 0) {
 			if (listExo.contains(ec))
 				exoEnCours = listExo.indexOf(ec);
+		} else {
+			actionShuff();
 		}
-			//---------Récupère informations------------
-
+		//---------Récupère informations------------
 
 		// Passer la fen�tre en fullscreen == cacher la barre de notification
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -219,7 +230,8 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 				inverse();
 			}
 		});
-		bVerso.setVisibility(View.VISIBLE);
+		if (seance <= 0) bVerso.setVisibility(View.VISIBLE);
+		else bVerso.setVisibility(View.INVISIBLE);
 		RelativeLayout.LayoutParams pVerso = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pVerso.leftMargin=largButton;
 		pVerso.addRule(RelativeLayout.RIGHT_OF, bFav.getId());
@@ -260,6 +272,8 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 				filtre();
 			}
 		});
+		if (seance <= 0) bFiltre.setVisibility(View.VISIBLE);
+		else bFiltre.setVisibility(View.INVISIBLE);
 		RelativeLayout.LayoutParams pFiltre = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pFiltre.addRule(RelativeLayout.RIGHT_OF,bAffich.getId());
 		pFiltre.leftMargin=largButton*2;
@@ -272,6 +286,8 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		bPrev.setBackgroundResource(R.drawable.ic_action_previous_item);
 		bPrev.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) { actionPrev(); } } );
+		if (seance <= 0) bPrev.setVisibility(View.VISIBLE);
+		else bPrev.setVisibility(View.INVISIBLE);
 		RelativeLayout.LayoutParams pPrev = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pPrev.leftMargin=largButton;
 		pPrev.addRule(RelativeLayout.RIGHT_OF, bFiltre.getId());
@@ -284,6 +300,8 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		bNext.setBackgroundResource(R.drawable.ic_action_next_item);
 		bNext.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) { actionNext(); } });
+		if (seance <= 0) bNext.setVisibility(View.VISIBLE);
+		else bNext.setVisibility(View.INVISIBLE);
 		RelativeLayout.LayoutParams pNext = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pNext.leftMargin=largButton/3;
 		pNext.addRule(RelativeLayout.RIGHT_OF, bPrev.getId());
@@ -296,6 +314,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		bAlea.setBackgroundResource(R.drawable.ic_action_shuffle);
 		bAlea.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) { actionShuff(); } });
+		bAlea.setVisibility(View.VISIBLE);
 		RelativeLayout.LayoutParams pAlea = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pAlea.leftMargin=largButton/3;
 		pAlea.addRule(RelativeLayout.RIGHT_OF, bNext.getId());
@@ -343,7 +362,8 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 				saisie_resultat();
 			}
 		});
-		bRes.setVisibility(View.VISIBLE);
+		if (seance > 0) bRes.setVisibility(View.VISIBLE);
+		else bRes.setVisibility(View.INVISIBLE);
 		RelativeLayout.LayoutParams pRes = new RelativeLayout.LayoutParams(largButton - 5, largButton - 5);
 		pRes.leftMargin = 2 * largButton / 3;
 		pRes.addRule(RelativeLayout.RIGHT_OF, bAlea.getId());
@@ -396,9 +416,12 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		Couleurs = sharedPreferences.getString("prefCouleur", "blue");
 		LMouches = sharedPreferences.getString("prefMouches", "sans");
 		LCadres = sharedPreferences.getString("prefCadres", "plein");
-		Soluce = sharedPreferences.getBoolean("prefSoluce", true);
+		if (seance <= 0) Soluce = sharedPreferences.getBoolean("prefSoluce", true);
+		else Soluce = sharedPreferences.getBoolean("prefSoluceTest", false);
 		Symetrie = sharedPreferences.getBoolean("prefSymetrie", true);
 		Keepon = sharedPreferences.getBoolean("prefEcranOn", false);
+		NbTent = sharedPreferences.getInt("prefNbExoTest", 3);
+		BonusTest = sharedPreferences.getBoolean("prefBonusTest", false);
 		if (Keepon) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		} else {
@@ -498,15 +521,18 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 
     private  void actionLock() {
 		lock=1;
-	    bPlus.setVisibility(View.INVISIBLE);
-	    bMoins.setVisibility(View.INVISIBLE);
-		bRes.setVisibility(View.VISIBLE);
-		bFiltre.setVisibility(View.VISIBLE);
-		bPrev.setVisibility(View.VISIBLE);
-	    bNext.setVisibility(View.VISIBLE);
-		bComm.setVisibility(View.INVISIBLE);
-		bVerso.setVisibility(View.VISIBLE);
+		bPlus.setVisibility(View.INVISIBLE);
+		bMoins.setVisibility(View.INVISIBLE);
 		bAlea.setVisibility(View.VISIBLE);
+		bComm.setVisibility(View.INVISIBLE);
+		if (seance <= 0) {
+			bFiltre.setVisibility(View.VISIBLE);
+			bPrev.setVisibility(View.VISIBLE);
+			bNext.setVisibility(View.VISIBLE);
+			bVerso.setVisibility(View.VISIBLE);
+		} else {
+			bRes.setVisibility(View.VISIBLE);
+		}
 		readExo(exoEnCours);
 		tapis.setLock(lock);
 		drawTapis();
@@ -724,25 +750,20 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	 }
 
 	private void saisie_resultat() {
-		// Affichage Typologie
-		if (lock == 1) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle("saisissez les résultats de l'exo");
 			LayoutInflater inflater = LayoutInflater.from(this);
-			// Il faudra donc un layout alert.xml sous res/layout avec un EditText ayant un id a EditText01
-			// Mais si vous etes ici, vous devez deja conna�tre tout cela
 			final View dialogview = inflater.inflate(R.layout.note_exo, null);
-			//AlertDialog
 			alert.setView(dialogview);
-			((EditText) dialogview.findViewById(R.id.alertScore)).requestFocus();
+		((EditText) dialogview.findViewById(R.id.alertScore1)).requestFocus();
 			alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int idx) {
-					int score = Integer.parseInt(((EditText) dialogview.findViewById(R.id.alertScore)).getText().toString());
+					int score = Integer.parseInt(((EditText) dialogview.findViewById(R.id.alertScore1)).getText().toString());
 					int rgp;
-					if (((CheckBox) dialogview.findViewById(R.id.alertRegroup)).isChecked())
+					if (((CheckBox) dialogview.findViewById(R.id.alertRegroup1)).isChecked())
 						rgp = 1;
 					else rgp = 0;
-					db.saveResult(exo.getId(), score, rgp);
+					db.saveResult(seance, exo.getId(), score, rgp);
 				}
 			});
 			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -750,7 +771,6 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 				}
 			});
 			alert.show();
-		}
 	}
 
 	private void affich_resultat() {

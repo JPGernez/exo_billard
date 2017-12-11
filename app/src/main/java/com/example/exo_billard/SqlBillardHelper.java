@@ -90,16 +90,34 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 
     //Table des ScoreExo
     private static final String TABLE_SCORE = "SCORE";
+
+    private static final String SCORE_IDSEANCE = "idSeance";
     private static final String SCORE_ID = "idExo";
     private static final String SCORE_RES = "NbCoups";
     private static final String SCORE_RGP = "Regroupement";
     private static final String SCORE_DATE = "Date";
 
     private static final String SCORE_CREATE = "create table " + TABLE_SCORE
-            + " (" + SCORE_ID + " integer, "
+            + " (" + SCORE_IDSEANCE + " integer, "
+            + SCORE_ID + " integer, "
             + SCORE_RES + " integer, "
             + SCORE_RGP + " integer, "
             + SCORE_DATE + " integer ); ";
+
+    //Table des SeanceExo
+    private static final String TABLE_SEANCE = "SEANCE";
+    private static final String SEANCE_ID = "_idSeance";
+    private static final String SEANCE_IDLIVRET = "idLivret";
+    private static final String SEANCE_NBEXO = "Nb_Exo";
+    private static final String SEANCE_DATEDEB = "DateDeb";
+    private static final String SEANCE_DATEFIN = "DateFin";
+
+    private static final String SEANCE_CREATE = "create table " + TABLE_SEANCE
+            + " (" + SEANCE_ID + " integer primary key autoincrement, "
+            + SEANCE_IDLIVRET + " integer, "
+            + SEANCE_NBEXO + " integer, "
+            + SEANCE_DATEDEB + " integer, "
+            + SEANCE_DATEFIN + " integer ); ";
 
     //table match
     private static final String TABLE_MATCH = "MATCH";
@@ -119,7 +137,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 //	  public static final String DATABASE_CREATE = LIV_CREATE + " "+ EXO_CREATE + " " + EMPL_CREATE; 
 //	  public static final String DATABASE_CREATE =EXO_CREATE +" "+ EMPL_CREATE; 
 	private static final String DATABASE_NAME = "ExoBillard.db";
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 22;
 
 	public SqlBillardHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -137,7 +155,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		database.execSQL(EMPL_CREATE);
 		database.execSQL(TAG_CREATE);
         database.execSQL(SCORE_CREATE);
-        database.execSQL(SCORE_CREATE);
+        database.execSQL(SEANCE_CREATE);
         database.execSQL(MATCH_CREATE);
 
 	}
@@ -147,7 +165,9 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		Log.w(SqlBillardHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
-        db.execSQL(MATCH_CREATE);
+        db.execSQL("DROP TABLE " + TABLE_SCORE);
+        db.execSQL(SEANCE_CREATE);
+        db.execSQL(SCORE_CREATE);
     }
 
 	// ------------------------ "EXO" table methods ----------------//
@@ -489,17 +509,31 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
         db.insert(TABLE_MATCH, null, res);
     }
 
-    public void saveResult(int exoId, int score, int regroup) {
+    public void saveResult(long seanceId, long exoId, int score, int regroup) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues res = new ContentValues();
+        res.put(SCORE_IDSEANCE, seanceId);
         res.put(SCORE_ID, exoId);
         res.put(SCORE_RES, score);
         res.put(SCORE_RGP, regroup);
         res.put(SCORE_DATE, System.currentTimeMillis());
         // insert row
         db.insert(TABLE_SCORE, null, res);
+    }
+
+    public long createSeance(int idlivret, int nbExo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues res = new ContentValues();
+        res.put(SEANCE_IDLIVRET, idlivret);
+        res.put(SEANCE_NBEXO, nbExo);
+        res.put(SEANCE_DATEDEB, System.currentTimeMillis());
+        res.put(SEANCE_DATEFIN, -1);
+        // insert row
+        long seance_id = db.insert(TABLE_SEANCE, null, res);
+        return seance_id;
     }
 
 

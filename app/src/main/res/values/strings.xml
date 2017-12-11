@@ -38,6 +38,13 @@
     <string name="saveExo">Sauvegarder l\'exo</string>
     <string name="undoExo">Annuler</string>
 
+    <array name="liste_Tentatives">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </array>
+
     <array name="liste_couleurs_fr">
         <item>Bleu</item>
         <item>Rouge</item>

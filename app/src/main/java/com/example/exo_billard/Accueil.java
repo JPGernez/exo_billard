@@ -16,12 +16,15 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -41,6 +45,11 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
     public String Couleurs = "";
     SqlBillardHelper db;
     private boolean CoulAlea;
+    ArrayList<String> titres = new ArrayList<>();
+    List<Integer> idLivret = new ArrayList<>();
+    List<Integer> nbExo = new ArrayList<>();
+    int selectedLiv;
+    int tailleLiv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +144,105 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
     }
 
     public void lancementTest(View v) {
-        // Intent intent = new Intent(Accueil.this, Exo_entree.class);
-        // startActivity(intent);
+
+        final AlertDialog alert = new AlertDialog.Builder(this).create();
+        //LayoutInflater
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View dialogview = inflater.inflate(R.layout.lanc_exo, null);
+        //AlertDialog
+        alert.setView(dialogview);
+        titres.clear();
+        idLivret.clear();
+        titres.add("Parcourir tous les livrets");
+        idLivret.add(-2);
+        List livrets = db.getListlivret();
+        for (int i = 0; i < livrets.size(); i++) {
+            if (db.getListExo(new MotsCles(), (int) livrets.get(i)).size() > 0) {
+                titres.add(db.getTitreLivret((int) livrets.get(i)));
+                idLivret.add((int) livrets.get(i));
+            }
+        }
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, titres);
+
+        Spinner spinner = (Spinner) dialogview.findViewById(R.id.Lanc_listLivret);
+        spinner.setAdapter(adapter);
+        spinner.setEnabled(true);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                RadioButton rb1 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBNvLivret);
+                rb1.setChecked(true);
+                selectedLiv = idLivret.get(position);
+                tailleLiv = db.getListExo(new MotsCles(), selectedLiv).size();
+                SeekBar s = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
+                TextView t = (TextView) dialogview.findViewById(R.id.Lanc_nb);
+                s.setMax(tailleLiv - 1);
+                if (tailleLiv - 1 > 19) {
+                    s.setProgress(19);
+                    t.setText("20 sur " + tailleLiv + " exos du livret");
+                } else {
+                    s.setProgress(tailleLiv - 1);
+                    t.setText(tailleLiv + " sur " + tailleLiv + " exos du livret");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
+        sb1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChanged = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChanged = progress;
+                TextView t = (TextView) dialogview.findViewById(R.id.Lanc_nb);
+
+                t.setText(progressChanged + 1 + " sur " + tailleLiv + " exos du livret");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        alert.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int idx) {
+
+                //
+                //
+            }
+        });
+        alert.setButton(Dialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int idx) {
+                alert.cancel();
+                //
+            }
+        });
+        alert.show();
+        Button posB = (Button) alert.getButton(AlertDialog.BUTTON_POSITIVE);
+        posB.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        RadioButton rb1 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBNvLivret);
+                                        //  if (rb1.isChecked()){
+                                        SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
+                                        long idSeance = db.createSeance(selectedLiv, sb1.getProgress() + 1);
+                                        //}
+                                        Intent intent = new Intent(Accueil.this, ExoView.class);
+                                        intent.putExtra("livret_sel", selectedLiv);
+                                        intent.putExtra("seance", idSeance);
+                                        startActivity(intent);
+                                        alert.cancel();
+                                    }
+                                }
+        );
     }
 
     public void lancementScore(View v) {

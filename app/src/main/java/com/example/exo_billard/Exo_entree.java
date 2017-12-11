@@ -226,7 +226,9 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
                            else{
                                intent.putExtra("exo_sel",-1);
                            }
-                           startActivity(intent);
+                            intent.putExtra("seance", -1);
+
+                            startActivity(intent);
 
                         }
                         else if (v==tapis2) {
@@ -234,6 +236,7 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
                             if (liv >= 0) intent.putExtra("livret_sel", lLivret.get(liv));
                             else intent.putExtra("livret_sel", liv);
                             intent.putExtra("exo_sel", lExo.get(premExo + 1));
+                            intent.putExtra("seance", -1);
                             startActivity(intent);
                         }
                         else if (v==tapis3) {
@@ -241,6 +244,7 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
                             if (liv >= 0) intent.putExtra("livret_sel", lLivret.get(liv));
                             else intent.putExtra("livret_sel", liv);
                             intent.putExtra("exo_sel", lExo.get(premExo + 2));
+                            intent.putExtra("seance", -1);
                             startActivity(intent);
                         }
                     }
@@ -507,7 +511,7 @@ private void readPref() {
         private void majListLivret() {
         // Recup donn�es Exos.
         lLivret = db.getListlivret();
-        nbLiv = lLivret.size();
+            nbLiv = lLivret.size();
         addItemsOnSpinner();
     }
 
