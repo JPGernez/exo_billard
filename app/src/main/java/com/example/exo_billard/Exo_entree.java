@@ -3,14 +3,11 @@ package com.example.exo_billard;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -22,11 +19,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -35,6 +30,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickListener , View.OnTouchListener {
 
@@ -546,7 +543,7 @@ private void readPref() {
                 return true;
             case R.id.exportL:
                 if (liv >= 0) {
-                    String result2 = db.exportLivret(lLivret.get(liv));
+                    String result2 = db.exportLivret(Exo_entree.this, lLivret.get(liv));
                     Toast.makeText(Exo_entree.this, result2, Toast.LENGTH_LONG).show();
                 }
                 return true;
@@ -559,16 +556,17 @@ private void readPref() {
                 //AlertDialog
                 alert.setView(dialogview);
 
+                File myDir = new File(this.getExternalFilesDir(DIRECTORY_DOWNLOADS).getPath());
 
-                File myDir = new File(Environment.getExternalStorageDirectory(), "ExoBillard");
+                ArrayList<String> titres = new ArrayList<>();
+
+                File[] fichiers = myDir.listFiles();
                 TextView txt = (TextView) dialogview.findViewById(R.id.infoImport);
                 txt.setText("Les fichiers eBi1 et eBi2 doivent se trouver sous " + myDir.toString());
                 Spinner spinner = (Spinner) dialogview.findViewById(R.id.listImport);
 
 
-                ArrayList<String> titres = new ArrayList<>();
-
-                File[] fichiers = myDir.listFiles();
+                //Toast.makeText(Exo_entree.this, fichiers[0].toString() + " -" + fichiers[1].toString(), Toast.LENGTH_LONG).show();
                 int i = 0;
                 // Si le répertoire n'est pas vide...
                 if(fichiers != null)
@@ -579,9 +577,8 @@ private void readPref() {
                             titres.add(nomCourt);
                             i++;
                         }
-
                     }
-                if (i>0 ) {
+                if (i > 0) {
                     ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, titres);
                     spinner.setAdapter(adapter);
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -589,7 +586,7 @@ private void readPref() {
 
                             Spinner spinner = (Spinner) dialogview.findViewById(R.id.listImport);
                             String ImportSel = spinner.getSelectedItem().toString();
-                            db.importLivret(ImportSel);
+                            db.importLivret(Exo_entree.this, ImportSel);
                             majListLivret();
 
                         }
@@ -599,8 +596,8 @@ private void readPref() {
                         }
                     });
                     alert.show();
-                }
-                else Toast.makeText(Exo_entree.this, "Les fichiers eBi1 et eBi2 doivent se trouver sous " + myDir.toString(), Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(Exo_entree.this, "Ici Les fichiers eBi1 et eBi2 doivent se trouver sous " + myDir.toString(), Toast.LENGTH_LONG).show();
                 return true;
             case R.id.options:
                 Intent intent2 = new Intent(this, Preferences.class);

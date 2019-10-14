@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -175,6 +176,8 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                 selectedLiv = idLivret.get(position);
                 tailleLiv = db.getListExo(new MotsCles(), selectedLiv).size();
                 SeekBar s = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
+                SeekBar s2 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBarRgpt);
+
                 TextView t = (TextView) dialogview.findViewById(R.id.Lanc_nb);
                 s.setMax(tailleLiv - 1);
                 if (tailleLiv - 1 > 19) {
@@ -184,6 +187,7 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                     s.setProgress(tailleLiv - 1);
                     t.setText(tailleLiv + " sur " + tailleLiv + " exos du livret");
                 }
+                s2.setProgress(5);
             }
 
             @Override
@@ -231,10 +235,14 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                                     @Override
                                     public void onClick(View v) {
                                         RadioButton rb1 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBNvLivret);
-                                        //  if (rb1.isChecked()){
-                                        SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
-                                        long idSeance = db.createSeance(selectedLiv, sb1.getProgress() + 1);
-                                        //}
+                                        long idSeance = -1;
+                                        if (rb1.isChecked()) {
+                                            SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
+                                            SeekBar sb2 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBarRgpt);
+                                            CheckBox cb1 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkRgpt);
+                                            CheckBox cb2 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkSerie);
+                                            idSeance = Eval.creaEval((Context) null, selectedLiv, sb1.getProgress() + 1, cb1.isChecked(), cb2.isChecked(), sb2.getProgress() + 1);
+                                        }
                                         Intent intent = new Intent(Accueil.this, ExoView.class);
                                         intent.putExtra("livret_sel", selectedLiv);
                                         intent.putExtra("seance", idSeance);

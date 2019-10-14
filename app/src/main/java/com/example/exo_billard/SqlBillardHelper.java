@@ -26,8 +26,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
 
 public class SqlBillardHelper extends SQLiteOpenHelper {
 
@@ -89,47 +93,68 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 			+ MOTCLE + " text); ";
 
     //Table des ScoreExo
-    private static final String TABLE_SCORE = "SCORE";
+	private static final String TABLE_SCORE = "EVALEXO";
 
-    private static final String SCORE_IDSEANCE = "idSeance";
-    private static final String SCORE_ID = "idExo";
-    private static final String SCORE_RES = "NbCoups";
-    private static final String SCORE_RGP = "Regroupement";
-    private static final String SCORE_DATE = "Date";
+	private static final String SCORE_IDEVAL = "idEval";
+	private static final String SCORE_ID = "idExo";
+	private static final String SCORE_INVERSE = "idInverse";
+	private static final String SCORE_TERM = "exoTermine";
+	private static final String SCORE_RES1 = "NbCoups1";
+	private static final String SCORE_RES2 = "NbCoups2";
+	private static final String SCORE_RES3 = "NbCoups3";
+	private static final String SCORE_RGP1 = "Regroupement1";
+	private static final String SCORE_RGP2 = "Regroupement2";
+	private static final String SCORE_RGP3 = "Regroupement3";
 
     private static final String SCORE_CREATE = "create table " + TABLE_SCORE
-            + " (" + SCORE_IDSEANCE + " integer, "
-            + SCORE_ID + " integer, "
-            + SCORE_RES + " integer, "
-            + SCORE_RGP + " integer, "
-            + SCORE_DATE + " integer ); ";
+			+ " ("
+			+ SCORE_IDEVAL + " integer, "
+			+ SCORE_ID + " integer, "
+			+ SCORE_INVERSE + " integer, "
+			+ SCORE_TERM + " integer, "
+			+ SCORE_RES1 + " integer, "
+			+ SCORE_RES2 + " integer, "
+			+ SCORE_RES3 + " integer, "
+			+ SCORE_RGP1 + " integer, "
+			+ SCORE_RGP2 + " integer, "
+			+ SCORE_RGP3 + " integer); ";
 
     //Table des SeanceExo
-    private static final String TABLE_SEANCE = "SEANCE";
-    private static final String SEANCE_ID = "_idSeance";
-    private static final String SEANCE_IDLIVRET = "idLivret";
-    private static final String SEANCE_NBEXO = "Nb_Exo";
-    private static final String SEANCE_DATEDEB = "DateDeb";
-    private static final String SEANCE_DATEFIN = "DateFin";
+	private static final String TABLE_SEANCE = "EVAL";
+	private static final String SEANCE_ID = "_idEval";
+	private static final String SEANCE_IDLIVRET = "idLivret";
+	private static final String SEANCE_OCCURENCE = "Occurence";
+	private static final String SEANCE_NBEXO = "Nb_Exo";
+	private static final String SEANCE_DATECREA = "DateCrea";
+	private static final String SEANCE_BONUSRGPT = "bonusRgpt";
+	private static final String SEANCE_BONUSSERIE = "bonusSerie";
+	private static final String SEANCE_NBPOURSERIE = "nbPourSerie";
+
+
 
     private static final String SEANCE_CREATE = "create table " + TABLE_SEANCE
             + " (" + SEANCE_ID + " integer primary key autoincrement, "
-            + SEANCE_IDLIVRET + " integer, "
-            + SEANCE_NBEXO + " integer, "
-            + SEANCE_DATEDEB + " integer, "
-            + SEANCE_DATEFIN + " integer ); ";
+			+ SEANCE_IDLIVRET + " integer, "
+			+ SEANCE_OCCURENCE + " integer, "
+			+ SEANCE_NBEXO + " integer, "
+			+ SEANCE_DATECREA + " integer, "
+			+ SEANCE_BONUSRGPT + " integer, "
+			+ SEANCE_BONUSSERIE + " integer, "
+			+ SEANCE_NBPOURSERIE + " integer ); ";
 
     //table match
-    private static final String TABLE_MATCH = "MATCH";
-    private static final String MATCH_ADV = "adversaire";
-    private static final String MATCH_REP = "NbCoups";
+	private static final String TABLE_MATCH = "ResultatMatch";
+	private static final String MATCH_ADV = "Adversaire";
+	private static final String MATCH_ORDRE = "Ordre";
+	private static final String MATCH_REP = "NbCoups";
     private static final String MATCH_SCORE = "Score";
     private static final String MATCH_SCOREADV = "ScoreAdv";
     private static final String MATCH_DATE = "Date";
     private static final String MATCH_CREATE = "create table " + TABLE_MATCH
             + " (" + MATCH_ADV + " text, "
-            + MATCH_REP + " integer, "
-            + MATCH_SCORE + " integer, "
+			+ MATCH_ORDRE + " integer, "
+			+ MATCH_REP + " integer, "
+			+ MATCH_SCORE + " integer, "
             + MATCH_SCOREADV + " integer, "
             + MATCH_DATE + " integer ); ";
 
@@ -165,10 +190,13 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		Log.w(SqlBillardHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE " + TABLE_SCORE);
-        db.execSQL(SEANCE_CREATE);
-        db.execSQL(SCORE_CREATE);
-    }
+		db.execSQL("DROP TABLE SEANCE");
+		db.execSQL("DROP TABLE SCORE");
+		db.execSQL("DROP TABLE `MATCH`");
+		db.execSQL(SEANCE_CREATE);
+		db.execSQL(SCORE_CREATE);
+		db.execSQL(MATCH_CREATE);
+	}
 
 	// ------------------------ "EXO" table methods ----------------//
 
@@ -509,112 +537,206 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
         db.insert(TABLE_MATCH, null, res);
     }
 
-    public void saveResult(long seanceId, long exoId, int score, int regroup) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues res = new ContentValues();
-        res.put(SCORE_IDSEANCE, seanceId);
-        res.put(SCORE_ID, exoId);
-        res.put(SCORE_RES, score);
-        res.put(SCORE_RGP, regroup);
-        res.put(SCORE_DATE, System.currentTimeMillis());
-        // insert row
-        db.insert(TABLE_SCORE, null, res);
-    }
-
-    public long createSeance(int idlivret, int nbExo) {
-        SQLiteDatabase db = this.getWritableDatabase();
+	public long addEval(Eval eval) {
+		SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues res = new ContentValues();
-        res.put(SEANCE_IDLIVRET, idlivret);
-        res.put(SEANCE_NBEXO, nbExo);
-        res.put(SEANCE_DATEDEB, System.currentTimeMillis());
-        res.put(SEANCE_DATEFIN, -1);
-        // insert row
-        long seance_id = db.insert(TABLE_SEANCE, null, res);
-        return seance_id;
-    }
-
-
-	public String exportLivret  (int liv_id) {
-
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
-
-            Livret livret = getLivret(liv_id);
-
-            List<Exo> Lexo = new CopyOnWriteArrayList<>();
-
-            int numExo = 0;
-            Exo exo = new Exo();
-            do {
-                exo = getExo(livret.getNumExo(numExo));
-                Lexo.add(exo);
-                numExo++;
-            } while (numExo < livret.getNbExo());
-
-            //pour créer le repertoire dans lequel on va mettre notre fichier
-
-            File myDir = new File(Environment.getExternalStorageDirectory(), "ExoBillard");
-
-
-            File myFile1 = new File(myDir, livret.getTitre() + ".eBi1"); //on déclare notre futur fichier
-            File myFile2 = new File(myDir, livret.getTitre() + ".eBi2"); //on déclare notre futur fichier
-
-            try {
-                // ouverture d'un flux de sortie vers le fichier
-                FileOutputStream fos1 = new FileOutputStream(myFile1);
-                // création d'un "flux objet" avec le flux fichier
-                ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
-                try {
-                    // sérialisation : écriture de l'objet dans le flux de sortie
-                    oos1.writeObject(livret);
-                    oos1.flush();
-                } finally {
-                    //fermeture des flux
-                    try {
-                        oos1.close();
-                    } finally {
-                        fos1.close();
-                    }
-                }
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-            try {
-                // ouverture d'un flux de sortie vers le fichier
-                FileOutputStream fos2 = new FileOutputStream(myFile2);
-                // création d'un "flux objet" avec le flux fichier
-                ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
-                try {
-                    // sérialisation : écriture de l'objet dans le flux de sortie
-                    oos2.writeObject(Lexo);
-                    oos2.flush();
-                } finally {
-                    //fermeture des flux
-                    try {
-                        oos2.close();
-                    } finally {
-                        fos2.close();
-                    }
-                }
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-            return "2 Fichiers "+ livret.getTitre()+" écrit sous " + myDir;
-        }
-        else {
-            return "Emplacement non disponible";
-        }
+		res.put(SEANCE_IDLIVRET, eval.getIdLivret());
+		res.put(SEANCE_NBEXO, eval.getNbExo());
+		res.put(SEANCE_DATECREA, eval.getDateCrea());
+		res.put(SEANCE_OCCURENCE, eval.getOccurence());
+		res.put(SEANCE_BONUSRGPT, eval.getBonusRgpt());
+		res.put(SEANCE_BONUSSERIE, eval.getBonusSerie());
+		res.put(SEANCE_NBPOURSERIE, eval.getNbPourSerie());
+		// insert row
+		long seance_id = db.insert(TABLE_SEANCE, null, res);
+		for (int i = 0; i < eval.getNbExo(); i++) {
+			Eval.ExoEval exo = eval.getExo(i);
+			addEvalExo(seance_id, exo);
+		}
+		return seance_id;
 	}
 
-	public void importLivret( String Liv) {
+	public Eval getEval(int seance_id) {
+		Eval eval = new Eval();
+
+		// recup info exo
+		String selectEval = "SELECT  * FROM " + TABLE_SEANCE
+				+ " WHERE " + SEANCE_ID + " = " + seance_id + ";";
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cEval = db.rawQuery(selectEval, null);
+		if (cEval.moveToFirst()) {
+			eval.setIdEval(seance_id);
+			Boolean test;
+			if (cEval.getInt((cEval.getColumnIndex(SEANCE_BONUSRGPT))) == -1)
+				test = false;
+			else
+				test = true;
+			eval.setBonusRgpt(test);
+			if (cEval.getInt((cEval.getColumnIndex(SEANCE_BONUSSERIE))) == -1)
+				test = false;
+			else
+				test = true;
+			eval.setBonusSerie(test);
+			eval.setDateCrea(cEval.getLong((cEval.getColumnIndex(SEANCE_DATECREA))));
+			eval.setIdLivret(cEval.getInt((cEval.getColumnIndex(SEANCE_IDLIVRET))));
+			eval.setNbExo(cEval.getInt((cEval.getColumnIndex(SEANCE_NBEXO))));
+			eval.setNbPourSerie(cEval.getInt((cEval.getColumnIndex(SEANCE_NBPOURSERIE))));
+			eval.setOccurence(cEval.getInt((cEval.getColumnIndex(SEANCE_OCCURENCE))));
+		}
+		cEval.close();
+		// recup liste exo
+		String selectExos = "SELECT  * FROM " + TABLE_SCORE
+				+ " WHERE " + SCORE_IDEVAL + " = " + seance_id + ";";
+		Cursor cExos = db.rawQuery(selectExos, null);
+		if (cExos.moveToFirst()) {
+			int i = 0;
+			boolean test;
+			do {
+				i++;
+				int exoId = cExos.getInt((cEval.getColumnIndex(SCORE_ID)));
+				eval.addNewExo(exoId, cExos.getInt((cEval.getColumnIndex(SCORE_INVERSE))));
+				eval.addNbPt(exoId, 1, cExos.getInt((cEval.getColumnIndex(SCORE_RES1))));
+				eval.addNbPt(exoId, 2, cExos.getInt((cEval.getColumnIndex(SCORE_RES2))));
+				eval.addNbPt(exoId, 3, cExos.getInt((cEval.getColumnIndex(SCORE_RES3))));
+				if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP1))) == -1)
+					test = false;
+				else
+					test = true;
+				eval.addRgpt(exoId, 1, test);
+				if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP2))) == -1)
+					test = false;
+				else
+					test = true;
+				eval.addRgpt(exoId, 2, test);
+				if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP3))) == -1)
+					test = false;
+				else
+					test = true;
+				eval.addRgpt(exoId, 3, test);
+				if (cExos.getInt((cExos.getColumnIndex(SCORE_TERM))) == -1)
+					test = false;
+				else
+					test = true;
+				eval.setExoTermine(exoId, test);
+
+			} while (cExos.moveToNext());
+		}
+		cExos.close();
+		return eval;
+
+	}
+
+
+	public void addEvalExo(long idEval, Eval.ExoEval exo) {
+		SQLiteDatabase db2 = this.getWritableDatabase();
+		ContentValues res2 = new ContentValues();
+		res2.put(SCORE_IDEVAL, idEval);
+		res2.put(SCORE_ID, exo.getIdExo());
+		res2.put(SCORE_INVERSE, exo.getInverse());
+		res2.put(SCORE_RES1, exo.getNbPt(1));
+		res2.put(SCORE_RES2, exo.getNbPt(2));
+		res2.put(SCORE_RES3, exo.getNbPt(3));
+		res2.put(SCORE_RGP1, exo.getRgpt(1));
+		res2.put(SCORE_RGP2, exo.getRgpt(2));
+		res2.put(SCORE_RGP3, exo.getRgpt(3));
+		res2.put(SCORE_RGP3, exo.getRgpt(3));
+		res2.put(SCORE_TERM, exo.getExoTer());
+		db2.insert(TABLE_SCORE, null, res2);
+	}
+
+	public void modEvalExo(long idEval, Eval.ExoEval exo) {
+		SQLiteDatabase db2 = this.getWritableDatabase();
+		ContentValues res2 = new ContentValues();
+		res2.put(SCORE_INVERSE, exo.getInverse());
+		res2.put(SCORE_RES1, exo.getNbPt(1));
+		res2.put(SCORE_RES2, exo.getNbPt(2));
+		res2.put(SCORE_RES3, exo.getNbPt(3));
+		res2.put(SCORE_RGP1, exo.getRgpt(1));
+		res2.put(SCORE_RGP2, exo.getRgpt(2));
+		res2.put(SCORE_RGP3, exo.getRgpt(3));
+		res2.put(SCORE_RGP3, exo.getRgpt(3));
+		res2.put(SCORE_TERM, exo.getExoTer());
+		db2.update(TABLE_SCORE, res2, SCORE_IDEVAL + " = ? " + SCORE_ID + " =?", new String[]{String.valueOf(idEval), String.valueOf(exo.getIdExo())});
+	}
+
+	public String exportLivret(Context context, int liv_id) {
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && !Environment.MEDIA_MOUNTED_READ_ONLY.equals(Environment.getExternalStorageState())) {
+
+			Livret livret = getLivret(liv_id);
+
+			List<Exo> Lexo = new CopyOnWriteArrayList<>();
+
+			int numExo = 0;
+			Exo exo = new Exo();
+			do {
+				exo = getExo(livret.getNumExo(numExo));
+				Lexo.add(exo);
+				numExo++;
+			} while (numExo < livret.getNbExo());
+
+			//pour créer le repertoire dans lequel on va mettre notre fichier
+			File myDir = new File(context.getExternalFilesDir(DIRECTORY_DOWNLOADS).getPath());
+
+			//File myDir = new File(Environment.getExternalStorageDirectory().getPath() + "/ExportExoBillard" );
+
+
+			File myFile1 = new File(myDir, livret.getTitre() + ".eBi1"); //on déclare notre futur fichier
+			File myFile2 = new File(myDir, livret.getTitre() + ".eBi2"); //on déclare notre futur fichier
+
+			try {
+				// ouverture d'un flux de sortie vers le fichier
+				FileOutputStream fos1 = new FileOutputStream(myFile1);
+				// création d'un "flux objet" avec le flux fichier
+				ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
+				try {
+					// sérialisation : écriture de l'objet dans le flux de sortie
+					oos1.writeObject(livret);
+					oos1.flush();
+				} finally {
+					//fermeture des flux
+					try {
+						oos1.close();
+					} finally {
+						fos1.close();
+					}
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+			try {
+				// ouverture d'un flux de sortie vers le fichier
+				FileOutputStream fos2 = new FileOutputStream(myFile2);
+				// création d'un "flux objet" avec le flux fichier
+				ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
+				try {
+					// sérialisation : écriture de l'objet dans le flux de sortie
+					oos2.writeObject(Lexo);
+					oos2.flush();
+				} finally {
+					//fermeture des flux
+					try {
+						oos2.close();
+					} finally {
+						fos2.close();
+					}
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+			return "2 Fichiers "+ livret.getTitre()+" écrit sous " + myDir;
+		} else {
+			return "Emplacement non disponible";
+		}
+	}
+
+	public void importLivret(Context context, String Liv) {
 
 		Livret livret = new Livret();
 
 		//pour créer le repertoire dans lequel on va récupérer les fichiers
-		File myDir = new File(Environment.getExternalStorageDirectory(), "ExoBillard");
+		File myDir = new File(context.getExternalFilesDir(DIRECTORY_DOWNLOADS).getPath());
+		//File myDir = new File(Environment.getExternalStorageDirectory().getPath() + "/Export ExoBillard" );
 
 
 		File myFile1 = new File(myDir, Liv+".eBi1"); //on déclare notre futur fichier

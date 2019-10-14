@@ -31,7 +31,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,9 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	int inverse=0;
 	int fav =0;
 	int rallumage = 0;
+	int numEssai = 0;
+	int numExo = 0;
+	int nbExoSeance = 0;
 
 	public String LMouches = "";
 	public String LCadres = "";
@@ -64,9 +69,10 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	// creattion d un nouvel exo
 	Exo exo = new Exo();
 	private List<Integer> listExo = new ArrayList<>();
+	Eval eval = new Eval();
 
-    Button bPlus ;
-    Button bMoins ;
+	Button bPlus;
+	Button bMoins ;
     Button bAffich ;
     Button bComm ;
     Button bTypo ;
@@ -121,18 +127,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		majListExo();
 		int ec;
 
-		if (savedInstanceState != null) {
-			ec = savedInstanceState.getInt("exo_sel");
-		} else if (extras != null & seance <= 0) {
-			ec = extras.getInt("exo_sel");
-		} else ec = 0;
-		exoEnCours = 0;
-		if (ec >= 0) {
-			if (listExo.contains(ec))
-				exoEnCours = listExo.indexOf(ec);
-		} else {
-			actionShuff();
-		}
+
 		//---------Récupère informations------------
 
 		// Passer la fen�tre en fullscreen == cacher la barre de notification
@@ -286,8 +281,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		bPrev.setBackgroundResource(R.drawable.ic_action_previous_item);
 		bPrev.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) { actionPrev(); } } );
-		if (seance <= 0) bPrev.setVisibility(View.VISIBLE);
-		else bPrev.setVisibility(View.INVISIBLE);
+		bPrev.setVisibility(View.VISIBLE);
 		RelativeLayout.LayoutParams pPrev = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pPrev.leftMargin=largButton;
 		pPrev.addRule(RelativeLayout.RIGHT_OF, bFiltre.getId());
@@ -300,8 +294,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		bNext.setBackgroundResource(R.drawable.ic_action_next_item);
 		bNext.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) { actionNext(); } });
-		if (seance <= 0) bNext.setVisibility(View.VISIBLE);
-		else bNext.setVisibility(View.INVISIBLE);
+		bNext.setVisibility(View.VISIBLE);
 		RelativeLayout.LayoutParams pNext = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pNext.leftMargin=largButton/3;
 		pNext.addRule(RelativeLayout.RIGHT_OF, bPrev.getId());
@@ -314,7 +307,8 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		bAlea.setBackgroundResource(R.drawable.ic_action_shuffle);
 		bAlea.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) { actionShuff(); } });
-		bAlea.setVisibility(View.VISIBLE);
+		if (seance <= 0) bAlea.setVisibility(View.VISIBLE);
+		else bAlea.setVisibility(View.INVISIBLE);
 		RelativeLayout.LayoutParams pAlea = new RelativeLayout.LayoutParams(largButton-5,largButton-5);
 		pAlea.leftMargin=largButton/3;
 		pAlea.addRule(RelativeLayout.RIGHT_OF, bNext.getId());
@@ -391,9 +385,38 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		lL.addView(lL2);
 		lL.setBackgroundColor(Constantes.couleurBack);
 
-		//Lecture exo 0 
+		//Lecture exo 0
+		numEssai = 0;
+		exoEnCours = 0;
+		if (savedInstanceState != null) {
+			ec = savedInstanceState.getInt("exo_sel");
+			numEssai = savedInstanceState.getInt("numEssai");
+		} else if (extras != null & seance <= 0) {
+			ec = extras.getInt("exo_sel");
+		} else ec = 0;
+		if (seance > 0) {
+			eval = db.getEval(seance);
+			if (eval.getNbExoEff() > 0) {
+				if (ec == 0) ec = eval.getDernExo();
+				if (numEssai == 0) numEssai = eval.getNbEssaiI(ec) + 1;
+				if (numEssai > eval.getNbEssai()) {
+					ec = 0;
+					numEssai = 1;
+				}
+			} else {
+				ec = 0;
+				numEssai = 1;
+			}
+		}*/
+
+		if (ec > 0 & (listExo.contains(ec))) {
+			exoEnCours = listExo.indexOf(ec);
+		} else {
+			actionShuff();
+		}
 		readExo(exoEnCours);
 	}
+
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -419,7 +442,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		if (seance <= 0) Soluce = sharedPreferences.getBoolean("prefSoluce", true);
 		else Soluce = sharedPreferences.getBoolean("prefSoluceTest", false);
 		Symetrie = sharedPreferences.getBoolean("prefSymetrie", true);
-		Keepon = sharedPreferences.getBoolean("prefEcranOn", false);
+		Keepon = sharedPreferences.getBoolean("prefKeepon", false);
 		NbTent = sharedPreferences.getInt("prefNbExoTest", 3);
 		BonusTest = sharedPreferences.getBoolean("prefBonusTest", false);
 		if (Keepon) {
@@ -427,7 +450,6 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		} else {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
-
 	}
 	private void readExo(int numExo) {
 
@@ -578,9 +600,23 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	// Aller exo au hasard
 	private  void actionShuff() {
 		Random randomGenerator = new Random();
-		if (nbExo>0) {
-			exoEnCours = randomGenerator.nextInt(nbExo);
+		if (seance < 0) {
+			if (nbExo > 0) {
+				exoEnCours = randomGenerator.nextInt(nbExo);
+			}
+		} else {
+			List<Integer> listExoRestant = new ArrayList<>();
+			for (int i = 0; i < listExo.size(); i++) {
+				if (!eval.getlistIdExo().contains(listExo.get(i)))
+					listExoRestant.add(listExo.get(i));
+			}
+			if (listExoRestant.size() > 0) {
+				int exoEnCoursRestant = randomGenerator.nextInt(listExoRestant.size());
+				exoEnCours = listExo.indexOf(listExoRestant.get(exoEnCoursRestant));
+			}
+			//else finSeance();
 		}
+		numEssai = 1;
 		tapis.setEmplSelect(0);
 		readExo(exoEnCours);
 		drawTapis();
@@ -754,16 +790,51 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 			alert.setTitle("saisissez les résultats de l'exo");
 			LayoutInflater inflater = LayoutInflater.from(this);
 			final View dialogview = inflater.inflate(R.layout.note_exo, null);
-			alert.setView(dialogview);
-		((EditText) dialogview.findViewById(R.id.alertScore1)).requestFocus();
+
+		//((EditText) dialogview.findViewById(R.id.alertScore)).requestFocus();
+		TextView t1 = (TextView) dialogview.findViewById(R.id.tvNumEssai);
+		t1.setText(numEssai + " esssai sur 3 / " + numExo + " exercices sur " + nbExo);
+		SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.alertScore);
+
+		sb1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			int progressChanged = 0;
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				progressChanged = progress;
+				TextView t = (TextView) dialogview.findViewById(R.id.alertAffichScore);
+				if (seekBar.getProgress() < 20) t.setText(String.valueOf(seekBar.getProgress()));
+				else t.setText("20+");
+				if (seekBar.getProgress() == 0)
+					((RadioButton) dialogview.findViewById(R.id.exoRate)).setChecked(true);
+				if (seekBar.getProgress() > 0 & ((RadioButton) dialogview.findViewById(R.id.exoRate)).isChecked())
+					((RadioButton) dialogview.findViewById(R.id.exoReussi)).setChecked(true);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
+		alert.setView(dialogview);
 			alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int idx) {
-					int score = Integer.parseInt(((EditText) dialogview.findViewById(R.id.alertScore1)).getText().toString());
+					int score = ((SeekBar) dialogview.findViewById(R.id.alertScore)).getProgress();
+					int resultat;
 					int rgp;
-					if (((CheckBox) dialogview.findViewById(R.id.alertRegroup1)).isChecked())
+					if (((RadioButton) dialogview.findViewById(R.id.exoRate)).isChecked())
+						resultat = 0;
+					else resultat = 1;
+					score = score * resultat;
+					if (((RadioButton) dialogview.findViewById(R.id.bonPlacement)).isChecked())
 						rgp = 1;
 					else rgp = 0;
-					db.saveResult(seance, exo.getId(), score, rgp);
+					Toast.makeText(ExoView.this, "Score " + score + " rgp " + rgp, Toast.LENGTH_LONG).show();
+					//db.saveResult(seance, exo.getId(), score, rgp);
 				}
 			});
 			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

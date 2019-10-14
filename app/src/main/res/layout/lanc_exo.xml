@@ -20,7 +20,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
-                android:text="Se baser sur le livret:" />
+                android:text="Creer une nouvelle évaluation:" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:text="En se basant sur le livret :" />
 
             <Spinner
                 android:id="@+id/Lanc_listLivret"
@@ -52,6 +60,37 @@
                 android:paddingLeft="20dp"
                 android:text="0 sur 0 du livret" />
 
+            <CheckBox
+                android:id="@+id/Lanc_checkRgpt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Bonus pour regroupement" />
+
+            <CheckBox
+                android:id="@+id/Lanc_checkSerie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Bonus pour série" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:text="Bonus si serie supperieur à :" />
+
+            <SeekBar
+                android:id="@+id/Lanc_seekBarRgpt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="20" />
+
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
@@ -75,6 +114,32 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1" />
+
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="#FF909090"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" />
+
+            <RadioButton
+                android:id="@+id/Lanc_RBOldSeanceTerm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ou recommencer une évaluation passée" />
+
+            <Spinner
+                android:id="@+id/Lanc_listSeanceTerm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1" />
+
         </RadioGroup>
 
     </LinearLayout>

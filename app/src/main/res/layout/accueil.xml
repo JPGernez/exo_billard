@@ -62,7 +62,7 @@
                 android:layout_weight="1"
                 android:onClick="lancementTest"
                 android:padding="5dp"
-                android:text="Faire un test" />
+                android:text="Faire une évaluation" />
         </TableRow>
 
 
