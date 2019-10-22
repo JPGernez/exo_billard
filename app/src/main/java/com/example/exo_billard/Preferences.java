@@ -4,6 +4,9 @@ package com.example.exo_billard;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Preferences extends PreferenceActivity {
 
     @Override

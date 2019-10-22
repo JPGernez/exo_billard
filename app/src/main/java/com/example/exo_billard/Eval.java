@@ -2,6 +2,7 @@ package com.example.exo_billard;
 /* Evaluation */
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,13 +13,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Eval implements Serializable {
 
     private long idEval;
-    private int occurence;
+    private long origine;
     private long datecrea;
     private int idLivret;
     private int nbExo;
-    private boolean bonusRgpt;
-    private boolean bonusSerie;
-    private int nbPourSerie;
     private List<ExoEval> listExo = new CopyOnWriteArrayList<>();
 
     //eClasse ExoEval
@@ -33,7 +31,7 @@ public class Eval implements Serializable {
         private boolean rgpt2;
         private boolean rgpt3;
 
-        public ExoEval(int idExo, int inverse, boolean exoTermine, int nbPt1, int nbPt2, int nbPt3, Boolean Rgpt1, Boolean Rgpt2, Boolean Rgpt3) {
+        public ExoEval(int idExo, int inverse, boolean exoTermine, int nbPt1, int nbPt2, int nbPt3, Boolean rgpt1, Boolean rgpt2, Boolean rgpt3) {
             this.idExo = idExo;
             this.inverse = inverse;
             this.exoTermine = exoTermine;
@@ -59,7 +57,7 @@ public class Eval implements Serializable {
 
         public int getNbPt(int i) {
             if (i == 1) return this.nbPt1;
-            if (i == 2) return this.nbPt2;
+            else if (i == 2) return this.nbPt2;
             else return this.nbPt3;
         }
 
@@ -83,13 +81,13 @@ public class Eval implements Serializable {
 
         public void setNbPt(int s, int i) {
             if (i == 1) this.nbPt1 = s;
-            if (i == 2) this.nbPt2 = s;
+            else if (i == 2) this.nbPt2 = s;
             else this.nbPt3 = s;
         }
 
         public void setRgpt(boolean r, int i) {
             if (i == 1) this.rgpt1 = r;
-            if (i == 2) this.rgpt2 = r;
+            else if (i == 2) this.rgpt2 = r;
             else this.rgpt3 = r;
         }
 
@@ -99,7 +97,7 @@ public class Eval implements Serializable {
     public int getIndice(int idExo) {
         int sortie = 0;
         for (int i = 0; i < listExo.size(); i++)
-            if (listExo.get(i).getIdExo() == idExo) sortie = i;
+            if (this.listExo.get(i).getIdExo() == idExo) sortie = i;
         return sortie;
     }
 
@@ -114,36 +112,41 @@ public class Eval implements Serializable {
 
     //renseignement score
     public void addNbPt(int idExo, int i, int s) {
-        listExo.get(this.getIndice(idExo)).setNbPt(s, i);
+        this.listExo.get(this.getIndice(idExo)).setNbPt(s, i);
     }
 
     //renseignement regroupement
     public void addRgpt(int idExo, int i, boolean r) {
-        listExo.get(this.getIndice(idExo)).setRgpt(r, i);
+        this.listExo.get(this.getIndice(idExo)).setRgpt(r, i);
     }
 
     public void setExoTermine(int idExo, boolean r) {
-        listExo.get(this.getIndice(idExo)).setExoTer(r);
+        this.listExo.get(this.getIndice(idExo)).setExoTer(r);
     }
 
     // recuperation des scores
     public int getNbPt(int idExo, int i) {
-        return listExo.get(this.getIndice(idExo)).getNbPt(i);
+        return this.listExo.get(this.getIndice(idExo)).getNbPt(i);
     }
 
     // recuperation des regroupements
     public boolean getRgpt(int idExo, int i) {
-        return listExo.get(this.getIndice(idExo)).getRgpt(i);
+        return this.listExo.get(this.getIndice(idExo)).getRgpt(i);
     }
 
     // recuperation de l'identifiant de l'exo
     public int getIdExo(int i) {
-        return listExo.get(i).getIdExo();
+        return this.listExo.get(i).getIdExo();
     }
 
     //Recuperation de la liste de tous les exos
-    public List getlistIdExo() {
-        return this.listExo;
+    public List<Integer> getlistIdExo() {
+        List<Integer> lExo = new ArrayList<>();
+        Log.d("id exo", String.valueOf(this.listExo));
+        for (int i = 0; i < this.listExo.size(); i++) {
+            lExo.add(this.listExo.get(i).getIdExo());
+        }
+        return lExo;
     }
 
     // recuperation du nb d'exo dans l'eval
@@ -167,36 +170,12 @@ public class Eval implements Serializable {
 
     }
 
-    public void setOccurence(int i) {
-        this.occurence = i;
+    public void setOrigine(long i) {
+        this.origine = i;
     }
 
-    public int getOccurence() {
-        return this.occurence;
-    }
-
-    public void setBonusRgpt(boolean i) {
-        this.bonusRgpt = i;
-    }
-
-    public boolean getBonusRgpt() {
-        return this.bonusRgpt;
-    }
-
-    public void setBonusSerie(boolean i) {
-        this.bonusSerie = i;
-    }
-
-    public boolean getBonusSerie() {
-        return this.bonusSerie;
-    }
-
-    public void setNbPourSerie(int i) {
-        this.nbPourSerie = i;
-    }
-
-    public int getNbPourSerie() {
-        return this.nbPourSerie;
+    public long getOrigine() {
+        return this.origine;
     }
 
     public void setIdLivret(int i) {
@@ -219,6 +198,13 @@ public class Eval implements Serializable {
         return this.idEval;
     }
 
+    public int getExoNonTerm() {
+        int sortie = -1;
+        for (int i = 0; i < listExo.size(); i++)
+            if (listExo.get(i).getExoTer() == false & sortie == -1)
+                sortie = listExo.get(i).getIdExo();
+        return sortie;
+    }
     public void setDateCrea(long i) {
         this.datecrea = i;
     }
@@ -235,7 +221,8 @@ public class Eval implements Serializable {
         SqlBillardHelper db;
         db = new SqlBillardHelper(c);
         List<Integer> lExo = new ArrayList<>();
-        lExo = db.getListExo(null, idLivret);
+        MotsCles mot = new MotsCles();
+        lExo = db.getListExo(mot, idLivret);
         Random randomGenerator = new Random();
         eval.setIdLivret(idLivret);
         eval.setNbExo(nb_exo);
@@ -249,11 +236,34 @@ public class Eval implements Serializable {
             eval.addNewExo(lExo.get(exo), inverse);
             lExoRestant.remove(exo);
         }
-        eval.setOccurence(1);
-        eval.setBonusRgpt(bonusRgpt);
-        eval.setBonusSerie(bonusSerie);
-        eval.setNbPourSerie(nbPourSerie);
+        eval.setOrigine(-1);
         eval.setDateCrea(System.currentTimeMillis());
+        long idEval = db.addEval(eval);
+        eval.setIdEval(idEval);
+        return idEval;
+    }
+
+    public static Eval videEval(Eval e) {
+        for (int i = 0; i < e.getNbExo(); i++) {
+            e.getExo(i).setExoTer(false);
+            e.getExo(i).setRgpt(false, 1);
+            e.getExo(i).setRgpt(false, 2);
+            e.getExo(i).setRgpt(false, 3);
+            e.getExo(i).setNbPt(-1, 1);
+            e.getExo(i).setNbPt(-1, 2);
+            e.getExo(i).setNbPt(-1, 3);
+        }
+        return e;
+    }
+
+    public static long copieEval(Context c, long id) {
+        SqlBillardHelper db;
+        db = new SqlBillardHelper(c);
+        Eval eval = db.getEval(id);
+        if (eval.getOrigine() <= 0) eval.setOrigine(id);
+        eval = videEval(eval);
+        eval.setDateCrea(System.currentTimeMillis());
+        eval.setIdEval(-1);
         long idEval = db.addEval(eval);
         eval.setIdEval(idEval);
         return idEval;

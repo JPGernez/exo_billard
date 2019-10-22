@@ -44,36 +44,36 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Mode évaluations"
+        android:title="Option d'affichage des exercices"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
         <CheckBoxPreference
             android:key="prefSoluceTest"
             android:title="Affichage de la solution dès le début (mode évaluation)"
-            android:summaryOn="Lors des évaluations, on commence par affichier l'exo avec la solution"
-            android:summaryOff="Lors des évaluations, on commence par affichier que la position de départ"
+            android:summaryOn="Lors des évaluations, on commence par afficher l'exo avec la solution"
+            android:summaryOff="Lors des évaluations, on commence par afficher que la position de départ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false" />
-
-        <ListPreference
-            android:key="prefNbExoTest"
-            android:dialogTitle="Nombre de tenatives (mode évaluation) "
-            android:entries="@array/liste_Tentatives"
-            android:entryValues="@array/liste_Tentatives"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:title="Choisir le nombre de tenatives par exo en mode évaluations." />
 
         <CheckBoxPreference
-            android:key="prefBonusTest"
-            android:title="Bonus si 5 points ou plus réalisés d'affilé"
-            android:summaryOn="Ajout d'un point de bonus"
-            android:summaryOff="Pas de bonus"
+            android:key="prefSoluce"
+            android:title="Affichage de la solution dès le début (mode entrainement)"
+            android:summaryOn="En mode entrainement on commence par afficher l'exo avec la solution"
+            android:summaryOff="En mode entrainement on commence par afficher que la position de départ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:key="prefSymetrie"
+            android:title="Symetrie en mode entraînement"
+            android:summaryOn="Les exercices sont affichés aléatoirement aux 4 coins du billard"
+            android:summaryOff="Les exercices sont affichés comme rentrés"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true" />
 
 
     </PreferenceCategory>
@@ -89,25 +89,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false" />
-
-        <CheckBoxPreference
-            android:key="prefSoluce"
-            android:title="Affichage de la solution dès le début (mode entrainement)"
-            android:summaryOn="En mode entrainement on commence par affichier l'exo avec la solution"
-            android:summaryOff="En mode entrainement on commence par affichier que la position de départ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true" />
-
-        <CheckBoxPreference
-            android:key="prefSymetrie"
-            android:title="Symetrie en mode entraînement"
-            android:summaryOn="Les exercices sont affichés aléatoirement aux 4 coins du billard"
-            android:summaryOff="Les exercices sont affichés comme rentrés"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true" />
-
 
     </PreferenceCategory>
 </PreferenceScreen>

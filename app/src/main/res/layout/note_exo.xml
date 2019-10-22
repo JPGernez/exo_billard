@@ -7,67 +7,226 @@
     android:orientation="vertical">
     android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvNumEssai"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Essai 1 sur 3:"
-            android:textColor="@android:color/holo_blue_bright"
-            android:layout_marginStart="5dp" />
-
-
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <RadioButton
-            android:id="@+id/exoRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="Point raté" />
-
-        <RadioButton
-            android:id="@+id/exoReussi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Point réussi" />
-
-        <RadioButton
-            android:id="@+id/bonPlacement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Point réussi avec bon placement" />
-    </RadioGroup>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Optionnel: nb de points d'affilé:" />
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/alertAffichScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="20+" />
-
-        <SeekBar
-            android:id="@+id/alertScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:max="20" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Essai 1 sur 3:"
+                android:textColor="@android:color/holo_blue_bright"
+                android:layout_marginStart="5dp" />
 
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioButton
+                    android:id="@+id/exoRate1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Point raté" />
+
+                <RadioButton
+                    android:id="@+id/exoReussi1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Point réussi" />
+
+                <RadioButton
+                    android:id="@+id/bonPlacement1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Point réussi avec bon placement" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Optionnel: nb de points d'affilé:" />
+
+                <TextView
+                    android:id="@+id/alertAffichScore1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text=" " />
+
+                <SeekBar
+                    android:id="@+id/alertScore1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:max="20" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="#FF909090"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Essai 2 sur 3:"
+                android:textColor="@android:color/holo_blue_bright"
+                android:layout_marginStart="5dp" />
+
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioButton
+                    android:id="@+id/exoRate2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Point raté" />
+
+                <RadioButton
+                    android:id="@+id/exoReussi2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Point réussi" />
+
+                <RadioButton
+                    android:id="@+id/bonPlacement2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Point réussi avec bon placement" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Optionnel: nb de points d'affilé:" />
+
+                <TextView
+                    android:id="@+id/alertAffichScore2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text=" " />
+
+                <SeekBar
+                    android:id="@+id/alertScore2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:max="20" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="#FF909090"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Essai 3 sur 3:"
+                android:textColor="@android:color/holo_blue_bright"
+                android:layout_marginStart="5dp" />
+
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioButton
+                    android:id="@+id/exoRate3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Point raté" />
+
+                <RadioButton
+                    android:id="@+id/exoReussi3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Point réussi" />
+
+                <RadioButton
+                    android:id="@+id/bonPlacement3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Point réussi avec bon placement" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Optionnel: nb de points d'affilé:" />
+
+                <TextView
+                    android:id="@+id/alertAffichScore3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text=" " />
+
+                <SeekBar
+                    android:id="@+id/alertScore3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:max="20" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

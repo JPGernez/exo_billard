@@ -18,6 +18,7 @@ public class Exo implements Serializable {
     private float xComm = 25;
     private float yComm= 25;
 	private int note = 0;
+
 	private Bille[] B = new Bille[3];
     private int liv_id = -1;
 	private int fav=0;
@@ -71,8 +72,8 @@ public class Exo implements Serializable {
 		this.exo_id =  id;
 	}
 
-	// Modification de la note d exercice
-	public void setNote(int n) {
+	// Modification statut favoris
+	public void setFav(int n) {
 		this.note =  n;
 	}
 
@@ -86,8 +87,8 @@ public class Exo implements Serializable {
 		this.commentaire =  c;
 	}
 
-	// Recuperation de la note
-	public int getNote() {
+	// Recuperation du statut favoris
+	public int getFav() {
 		return this.note;
 	}
 

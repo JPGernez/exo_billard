@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -188,6 +189,9 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                     t.setText(tailleLiv + " sur " + tailleLiv + " exos du livret");
                 }
                 s2.setProgress(5);
+                TextView t2 = (TextView) dialogview.findViewById(R.id.Lanc_nbSerie);
+                t2.setText("Bonus si serie supperieur à : " + 5);
+
             }
 
             @Override
@@ -195,10 +199,48 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
 
             }
         });
+
+        final Pair<List<Long>, List<String>> pair = db.getListEvalNonFinie();
+        ArrayAdapter adapter2 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pair.second);
+        Spinner spinnerExist = (Spinner) dialogview.findViewById(R.id.Lanc_listSeance);
+        spinnerExist.setAdapter(adapter2);
+        spinnerExist.setEnabled(true);
+        spinnerExist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                RadioButton rb1 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBOldSeance);
+                rb1.setChecked(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
+        final Pair<List<Long>, List<String>> pairTerm = db.getListEvalFinie();
+        ArrayAdapter adapter3 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pairTerm.second);
+        final Spinner spinnerExistTerm = (Spinner) dialogview.findViewById(R.id.Lanc_listSeanceTerm);
+        spinnerExistTerm.setAdapter(adapter3);
+        if (pairTerm.first.size() > 0)
+            spinnerExistTerm.setEnabled(true);
+        else
+            spinnerExistTerm.setEnabled(false);
+        spinnerExistTerm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                RadioButton rb2 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBOldSeanceTerm);
+                rb2.setChecked(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
         sb1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged = 0;
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress;
@@ -216,6 +258,30 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
 
             }
         });
+
+        SeekBar sb2 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBarRgpt);
+        sb2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChanged2 = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChanged2 = progress;
+                TextView t2 = (TextView) dialogview.findViewById(R.id.Lanc_nbSerie);
+                t2.setText("Bonus si série supérieure à : " + progressChanged2 + 1);
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        RadioButton rb1 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBNvLivret);
+        rb1.setChecked(true);
         alert.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int idx) {
 
@@ -235,16 +301,28 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                                     @Override
                                     public void onClick(View v) {
                                         RadioButton rb1 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBNvLivret);
+                                        RadioButton rb2 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBOldSeance);
+                                        RadioButton rb3 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBOldSeanceTerm);
                                         long idSeance = -1;
-                                        if (rb1.isChecked()) {
-                                            SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
-                                            SeekBar sb2 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBarRgpt);
-                                            CheckBox cb1 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkRgpt);
-                                            CheckBox cb2 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkSerie);
-                                            idSeance = Eval.creaEval((Context) null, selectedLiv, sb1.getProgress() + 1, cb1.isChecked(), cb2.isChecked(), sb2.getProgress() + 1);
-                                        }
+                                        SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
+                                        SeekBar sb2 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBarRgpt);
+                                        CheckBox cb1 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkRgpt);
+                                        CheckBox cb2 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkSerie);
                                         Intent intent = new Intent(Accueil.this, ExoView.class);
-                                        intent.putExtra("livret_sel", selectedLiv);
+                                        Spinner spinnerExist = (Spinner) dialogview.findViewById(R.id.Lanc_listSeance);
+                                        if (rb1.isChecked()) {
+                                            idSeance = Eval.creaEval(Accueil.this, selectedLiv, sb1.getProgress() + 1, cb1.isChecked(), cb2.isChecked(), sb2.getProgress() + 1);
+                                        } else if (rb2.isChecked()) {
+                                            idSeance = pair.first.get(spinnerExist.getSelectedItemPosition());
+                                        } else if (rb3.isChecked()) {
+                                            CheckBox cb3 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkDup);
+                                            if (cb3.isChecked()) {
+                                                idSeance = Eval.copieEval(Accueil.this, pairTerm.first.get(spinnerExistTerm.getSelectedItemPosition()));
+                                            } else {
+                                                idSeance = pairTerm.first.get(spinnerExistTerm.getSelectedItemPosition());
+                                            }
+                                        }
+                                        intent.putExtra("livret_sel", -1);
                                         intent.putExtra("seance", idSeance);
                                         startActivity(intent);
                                         alert.cancel();
@@ -279,23 +357,68 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
             }
         });
         alert.show();
+        Button posA = (Button) dialogview.findViewById(R.id.score_switch);
+        posA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText tg = (EditText) dialogview.findViewById(R.id.score_nomgauche);
+                EditText td = (EditText) dialogview.findViewById(R.id.score_nomdroit);
+                EditText sg = (EditText) dialogview.findViewById(R.id.score_scoregauche);
+                EditText sd = (EditText) dialogview.findViewById(R.id.score_scoredroit);
+
+                String nomg = tg.getText().toString();
+                String nomd = td.getText().toString();
+                String scoreg = sg.getText().toString();
+                String scored = sd.getText().toString();
+                tg.setText(nomd);
+                td.setText(nomg);
+                sg.setText(scored);
+                sd.setText(scoreg);
+                if (tg.isEnabled()) {
+                    tg.setEnabled(false);
+                    td.setEnabled(true);
+                } else {
+                    tg.setEnabled(true);
+                    td.setEnabled(false);
+                }
+
+            }
+        });
+
         Button posB = (Button) alert.getButton(AlertDialog.BUTTON_POSITIVE);
         posB.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        String adv = ((EditText) dialogview.findViewById(R.id.score_adv)).getText().toString();
                                         int rep = Integer.parseInt(((EditText) dialogview.findViewById(R.id.score_nbrep)).getText().toString());
-                                        int scoreadv = Integer.parseInt(((EditText) dialogview.findViewById(R.id.score_resAdv)).getText().toString());
-                                        int score = Integer.parseInt(((EditText) dialogview.findViewById(R.id.score_res)).getText().toString());
-
+                                        EditText tg = (EditText) dialogview.findViewById(R.id.score_nomgauche);
+                                        EditText td = (EditText) dialogview.findViewById(R.id.score_nomdroit);
+                                        EditText sg = (EditText) dialogview.findViewById(R.id.score_scoregauche);
+                                        EditText sd = (EditText) dialogview.findViewById(R.id.score_scoredroit);
+                                        String adv;
+                                        int scoreadv;
+                                        int score;
+                                        int ordre;
+                                        if (tg.isActivated()) {
+                                            adv = tg.getText().toString();
+                                            scoreadv = Integer.parseInt(sg.getText().toString());
+                                            score = Integer.parseInt(sd.getText().toString());
+                                            ordre = 2;
+                                        } else {
+                                            adv = td.getText().toString();
+                                            scoreadv = Integer.parseInt(sd.getText().toString());
+                                            score = Integer.parseInt(sg.getText().toString());
+                                            ordre = 1;
+                                        }
                                         if (rep < 1) {
                                             Toast.makeText(Accueil.this, "Le nombre de reprise ne peut pas etre nul", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            db.saveMatch(adv, rep, score, scoreadv);
+                                            db.saveMatch(adv, rep, score, scoreadv, ordre);
                                             alert.cancel();
                                         }
                                     }
                                 }
+
+
         );
     }
 

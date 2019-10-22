@@ -215,6 +215,7 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
                 if (depl==0 && deltaT<MIN_TEMPS && Math.abs(deltaX) <= MIN_DISTANCE) {
                         if (v==tapis) {
                            Intent intent = new Intent(Exo_entree.this, ExoView.class);
+                            intent.putExtra("seance", -1);
                            if (liv >= 0) intent.putExtra("livret_sel", lLivret.get(liv));
                            else intent.putExtra("livret_sel", liv);
                            if (lExo.size()>0 ) {
@@ -223,25 +224,23 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
                            else{
                                intent.putExtra("exo_sel",-1);
                            }
-                            intent.putExtra("seance", -1);
-
                             startActivity(intent);
 
                         }
                         else if (v==tapis2) {
                             Intent intent = new Intent(Exo_entree.this, ExoView.class);
+                            intent.putExtra("seance", -2);
                             if (liv >= 0) intent.putExtra("livret_sel", lLivret.get(liv));
                             else intent.putExtra("livret_sel", liv);
                             intent.putExtra("exo_sel", lExo.get(premExo + 1));
-                            intent.putExtra("seance", -1);
                             startActivity(intent);
                         }
                         else if (v==tapis3) {
                             Intent intent = new Intent(Exo_entree.this, ExoView.class);
+                            intent.putExtra("seance", -3);
                             if (liv >= 0) intent.putExtra("livret_sel", lLivret.get(liv));
                             else intent.putExtra("livret_sel", liv);
                             intent.putExtra("exo_sel", lExo.get(premExo + 2));
-                            intent.putExtra("seance", -1);
                             startActivity(intent);
                         }
                     }

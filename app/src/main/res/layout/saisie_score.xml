@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:shrinkColumns="*"
@@ -16,6 +17,10 @@
             android:layout_height="wrap_content"
             android:text="Nombre de reprises" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" " />
         <EditText
             android:id="@+id/score_nbrep"
             android:layout_width="wrap_content"
@@ -33,7 +38,7 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/score_adv"
+            android:id="@+id/score_nomgauche"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -41,10 +46,24 @@
             android:imeOptions="actionDone"
             android:inputType="textPersonName" />
 
-        <TextView
+        <Button
+            android:id="@+id/score_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vous" />
+            android:background="@android:drawable/ic_popup_sync"
+            android:scaleX="0.5"
+            android:scaleY="1" />
+
+        <EditText
+            android:id="@+id/score_nomdroit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Adversaire"
+            android:text="Vous"
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName" />
 
     </TableRow>
 
@@ -55,7 +74,7 @@
 
 
         <EditText
-            android:id="@+id/score_resAdv"
+            android:id="@+id/score_scoregauche"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -64,8 +83,12 @@
             android:text="0"
             android:imeOptions="actionDone" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" " />
         <EditText
-            android:id="@+id/score_res"
+            android:id="@+id/score_scoredroit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
