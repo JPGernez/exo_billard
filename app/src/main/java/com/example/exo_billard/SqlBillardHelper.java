@@ -110,6 +110,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 	private static final String SCORE_RGP1 = "Regroupement1";
 	private static final String SCORE_RGP2 = "Regroupement2";
 	private static final String SCORE_RGP3 = "Regroupement3";
+	private static final String SCORE_DATECREA = "DateCrea";
 
     private static final String SCORE_CREATE = "create table " + TABLE_SCORE
 			+ " ("
@@ -122,7 +123,8 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 			+ SCORE_RES3 + " integer, "
 			+ SCORE_RGP1 + " integer, "
 			+ SCORE_RGP2 + " integer, "
-			+ SCORE_RGP3 + " integer); ";
+			+ SCORE_RGP3 + " integer, "
+			+ SCORE_DATECREA + " long); ";
 
     //Table des SeanceExo
 	private static final String TABLE_SEANCE = "EVAL";
@@ -141,25 +143,29 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 
     //table match
 	private static final String TABLE_MATCH = "ResultatMatch";
+	private static final String MATCH_ID = "_idMatch";
 	private static final String MATCH_ADV = "Adversaire";
 	private static final String MATCH_ORDRE = "Ordre";
 	private static final String MATCH_REP = "NbCoups";
     private static final String MATCH_SCORE = "Score";
     private static final String MATCH_SCOREADV = "ScoreAdv";
-    private static final String MATCH_DATE = "Date";
+	private static final String MATCH_OFFICIEL = "Officiel";
+	private static final String MATCH_DATE = "Date";
     private static final String MATCH_CREATE = "create table " + TABLE_MATCH
-            + " (" + MATCH_ADV + " text, "
+			+ " (" + MATCH_ID + " integer primary key autoincrement, "
+			+ MATCH_ADV + " text, "
 			+ MATCH_ORDRE + " integer, "
 			+ MATCH_REP + " integer, "
 			+ MATCH_SCORE + " integer, "
             + MATCH_SCOREADV + " integer, "
-            + MATCH_DATE + " integer ); ";
+			+ MATCH_OFFICIEL + " integer, "
+			+ MATCH_DATE + " integer ); ";
 
 	//CREATION DB
 //	  public static final String DATABASE_CREATE = LIV_CREATE + " "+ EXO_CREATE + " " + EMPL_CREATE; 
 //	  public static final String DATABASE_CREATE =EXO_CREATE +" "+ EMPL_CREATE; 
 	private static final String DATABASE_NAME = "ExoBillard.db";
-	private static final int DATABASE_VERSION = 26;
+	private static final int DATABASE_VERSION = 33;
 
 	public SqlBillardHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -187,10 +193,14 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		Log.w(SqlBillardHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
-		db.execSQL("DROP TABLE " + TABLE_SEANCE);
-		db.execSQL("DROP TABLE " + TABLE_SCORE);
-		db.execSQL(SEANCE_CREATE);
-		db.execSQL(SCORE_CREATE);
+		//db.execSQL("DROP TABLE " + TABLE_SEANCE);
+		//db.execSQL("DROP TABLE " + TABLE_SCORE);
+		db.execSQL("DROP TABLE " + TABLE_MATCH);
+		Log.d("ici", TABLE_MATCH);
+		//db.execSQL(SEANCE_CREATE);
+		//db.execSQL(SCORE_CREATE);
+		db.execSQL(MATCH_CREATE);
+		Log.d("create", MATCH_CREATE);
 
 	}
 
@@ -520,7 +530,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		return empl_id;
 	}
 
-	public void saveMatch(String adv, int rep, int score, int scoreadv, int ordre) {
+	public long saveMatch(String adv, int rep, int score, int scoreadv, int ordre, boolean officiel, Date dt) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues res = new ContentValues();
@@ -529,10 +539,12 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		res.put(MATCH_REP, rep);
         res.put(MATCH_SCORE, score);
         res.put(MATCH_SCOREADV, scoreadv);
-        res.put(MATCH_DATE, System.currentTimeMillis());
-        // insert row
-        db.insert(TABLE_MATCH, null, res);
-    }
+		res.put(MATCH_OFFICIEL, officiel);
+		res.put(MATCH_DATE, dt.getTime());
+		// insert row
+		long match_id = db.insert(TABLE_MATCH, null, res);
+		return match_id;
+	}
 
 	public long addEval(Eval eval) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -654,7 +666,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 				i++;
 				int exoId = cExos.getInt((cExos.getColumnIndex(SCORE_ID)));
 
-				eval.addNewExo(exoId, cExos.getInt((cExos.getColumnIndex(SCORE_INVERSE))));
+				eval.addNewExo(exoId, cExos.getInt((cExos.getColumnIndex(SCORE_INVERSE))), eval.getDateCrea());
 
 				eval.addNbPt(exoId, 1, cExos.getInt((cExos.getColumnIndex(SCORE_RES1))));
 				eval.addNbPt(exoId, 2, cExos.getInt((cExos.getColumnIndex(SCORE_RES2))));
@@ -681,7 +693,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 				else
 					test = true;
 				eval.setExoTermine(exoId, test);
-
+				eval.setDateCrea(cExos.getLong((cExos.getColumnIndex(SCORE_DATECREA))));
 			} while (cExos.moveToNext());
 		}
 		cExos.close();
@@ -704,6 +716,7 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		res2.put(SCORE_RGP2, exo.getRgpt(2));
 		res2.put(SCORE_RGP3, exo.getRgpt(3));
 		res2.put(SCORE_TERM, exo.getExoTer());
+		res2.put(SCORE_DATECREA, exo.getDatecrea());
 		db2.insert(TABLE_SCORE, null, res2);
 	}
 
@@ -721,29 +734,35 @@ public class SqlBillardHelper extends SQLiteOpenHelper {
 		db2.update(TABLE_SCORE, res2, SCORE_IDEVAL + " = ? AND " + SCORE_ID + " =?", new String[]{String.valueOf(idEval), String.valueOf(exo.getIdExo())});
 	}
 
-	public NoteEval getNoteEvalExo(long seance_id, int idExo) {
+	public NoteEval getNoteEvalExo(long seance_id, int idExo, String NbEval) {
 		// recup info exo
 		NoteEval nE = new NoteEval();
-		String selectEval = "SELECT " + SCORE_RES1 + "," + SCORE_RES2 + "," + SCORE_RES3 + "," + SCORE_RGP1 + "," + SCORE_RGP2 + "," + SCORE_RGP3 + " FROM " + TABLE_SCORE + " WHERE 1=1 ";
+
+		String selectEval = "SELECT " + SCORE_RES1 + "," + SCORE_RES2 + "," + SCORE_RES3 + "," + SCORE_RGP1 + "," + SCORE_RGP2 + "," + SCORE_RGP3 + "," + SCORE_DATECREA + " FROM " + TABLE_SCORE + " WHERE 1=1 ";
 		if (idExo > 0) selectEval = selectEval + " and " + SCORE_ID + " = " + idExo;
 		if (seance_id > 0) selectEval = selectEval + " and " + SCORE_IDEVAL + " = " + seance_id;
-		selectEval = selectEval + ";";
+		selectEval = selectEval + " order by " + SCORE_DATECREA + " desc ;";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cExos = db.rawQuery(selectEval, null);
-		Boolean r1 = true;
-		Boolean r2 = true;
-		Boolean r3 = true;
+		Boolean r1;
+		Boolean r2;
+		Boolean r3;
+		int i = 0;
 
 		if (cExos.moveToFirst()) {
 			do {
-				r1 = true;
-				r2 = true;
-				r3 = true;
-				if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP1))) == 0) r1 = false;
-				if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP2))) == 0) r2 = false;
-				if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP3))) == 0) r3 = false;
-
-				nE.addResEvalElt(seance_id, idExo, cExos.getInt((cExos.getColumnIndex(SCORE_RES1))), cExos.getInt((cExos.getColumnIndex(SCORE_RES2))), cExos.getInt((cExos.getColumnIndex(SCORE_RES3))), r1, r2, r3);
+				i++;
+				Log.d("Lecture", "-" + NbEval + "- " + String.valueOf(i));
+				if (((NbEval.equals("une")) && (i <= 1)) || ((NbEval.equals("trois")) && (i <= 3)) || (NbEval.equals("toutes"))) {
+					Log.d("Lecture2", "-" + String.valueOf(cExos.getInt((cExos.getColumnIndex(SCORE_RES1)))) + " " + "- " + String.valueOf(i));
+					r1 = true;
+					r2 = true;
+					r3 = true;
+					if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP1))) == 0) r1 = false;
+					if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP2))) == 0) r2 = false;
+					if (cExos.getInt((cExos.getColumnIndex(SCORE_RGP3))) == 0) r3 = false;
+					nE.addResEvalElt(seance_id, idExo, cExos.getInt((cExos.getColumnIndex(SCORE_RES1))), cExos.getInt((cExos.getColumnIndex(SCORE_RES2))), cExos.getInt((cExos.getColumnIndex(SCORE_RES3))), r1, r2, r3);
+				}
 			} while (cExos.moveToNext());
 		}
 		nE.calculScore();

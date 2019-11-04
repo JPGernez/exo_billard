@@ -2,6 +2,7 @@ package com.example.exo_billard;
 /* Evaluation */
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -30,8 +31,9 @@ public class Eval implements Serializable {
         private boolean rgpt1;
         private boolean rgpt2;
         private boolean rgpt3;
+        private long datecrea;
 
-        public ExoEval(int idExo, int inverse, boolean exoTermine, int nbPt1, int nbPt2, int nbPt3, Boolean rgpt1, Boolean rgpt2, Boolean rgpt3) {
+        public ExoEval(int idExo, int inverse, boolean exoTermine, int nbPt1, int nbPt2, int nbPt3, Boolean rgpt1, Boolean rgpt2, Boolean rgpt3, Long dc) {
             this.idExo = idExo;
             this.inverse = inverse;
             this.exoTermine = exoTermine;
@@ -41,10 +43,15 @@ public class Eval implements Serializable {
             this.rgpt1 = rgpt1;
             this.rgpt2 = rgpt2;
             this.rgpt3 = rgpt3;
+            this.datecrea = dc;
         }
 
         public int getIdExo() {
             return this.idExo;
+        }
+
+        public long getDatecrea() {
+            return this.datecrea;
         }
 
         public int getInverse() {
@@ -71,14 +78,6 @@ public class Eval implements Serializable {
             this.exoTermine = t;
         }
 
-        public void setIdExo(int i) {
-            this.idExo = i;
-        }
-
-        public void setInverse(int i) {
-            this.inverse = i;
-        }
-
         public void setNbPt(int s, int i) {
             if (i == 1) this.nbPt1 = s;
             else if (i == 2) this.nbPt2 = s;
@@ -90,7 +89,6 @@ public class Eval implements Serializable {
             else if (i == 2) this.rgpt2 = r;
             else this.rgpt3 = r;
         }
-
     }
 
 
@@ -102,8 +100,8 @@ public class Eval implements Serializable {
     }
 
     // ajout d un exo a une Eval
-    public void addNewExo(int idExo, int inv) {
-        this.listExo.add(new ExoEval(idExo, inv, false, -1, -1, -1, false, false, false));
+    public void addNewExo(int idExo, int inv, Long dc) {
+        this.listExo.add(new ExoEval(idExo, inv, false, -1, -1, -1, false, false, false, dc));
     }
 
     public ExoEval getExo(int i) {
@@ -124,20 +122,6 @@ public class Eval implements Serializable {
         this.listExo.get(this.getIndice(idExo)).setExoTer(r);
     }
 
-    // recuperation des scores
-    public int getNbPt(int idExo, int i) {
-        return this.listExo.get(this.getIndice(idExo)).getNbPt(i);
-    }
-
-    // recuperation des regroupements
-    public boolean getRgpt(int idExo, int i) {
-        return this.listExo.get(this.getIndice(idExo)).getRgpt(i);
-    }
-
-    // recuperation de l'identifiant de l'exo
-    public int getIdExo(int i) {
-        return this.listExo.get(i).getIdExo();
-    }
 
     //Recuperation de la liste de tous les exos
     public List<Integer> getlistIdExo() {
@@ -154,21 +138,6 @@ public class Eval implements Serializable {
         return this.nbExo;
     }
 
-    // recuperation du nb d'exo effectué dans l'eval
-    public int getNbExoEffectue() {
-        int sortie = 0;
-        for (int i = 0; i < listExo.size(); i++)
-            if (listExo.get(i).getExoTer() == true) sortie = sortie + 1;
-        return sortie;
-    }
-
-    public int getNbEssaiI(int idExo) {
-        if (listExo.get(this.getIndice(idExo)).nbPt3 > -1) return 3;
-        else if (listExo.get(this.getIndice(idExo)).nbPt2 > -1) return 2;
-        else if (listExo.get(this.getIndice(idExo)).nbPt1 > -1) return 1;
-        else return 0;
-
-    }
 
     public void setOrigine(long i) {
         this.origine = i;
@@ -215,7 +184,7 @@ public class Eval implements Serializable {
     //creation d'une eval
 
 
-    public static long creaEval(Context c, int idLivret, int nb_exo, boolean bonusRgpt, boolean bonusSerie, int nbPourSerie) {
+    public static long creaEval(Context c, int idLivret, int nb_exo) {
         Eval eval = new Eval();
 
         SqlBillardHelper db;
@@ -233,7 +202,7 @@ public class Eval implements Serializable {
             }
             int exo = randomGenerator.nextInt(lExo.size());
             int inverse = randomGenerator.nextInt(5) - 1;
-            eval.addNewExo(lExo.get(exo), inverse);
+            eval.addNewExo(lExo.get(exo), inverse, eval.getDateCrea());
             lExoRestant.remove(exo);
         }
         eval.setOrigine(-1);

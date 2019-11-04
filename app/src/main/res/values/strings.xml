@@ -38,13 +38,6 @@
     <string name="saveExo">Sauvegarder l\'exo</string>
     <string name="undoExo">Annuler</string>
 
-    <array name="liste_Tentatives">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </array>
-
     <array name="liste_couleurs_fr">
         <item>Bleu</item>
         <item>Rouge</item>
@@ -58,13 +51,26 @@
         <item>netb</item>
     </array>
 
+    <array name="liste_NbEval_fr">
+        <item>Toutes</item>
+        <item>Les 3 dernières</item>
+        <item>La dernière</item>
+    </array>
+    <array name="liste_NbEval">
+        <item>toutes</item>
+        <item>trois</item>
+        <item>une</item>
+    </array>
+
     <array name="liste_lignes_fr">
         <item>Lignes pleines</item>
-        <item>Lignes pointillées</item>
+        <item>Lignes pointillées - gros</item>
+        <item>Lignes pointillées - fins</item>
         <item>Pas afficher les lignes</item>
     </array>
     <array name="liste_lignes">
         <item>plein</item>
+        <item>trait</item>
         <item>point</item>
         <item>sans</item>
     </array>

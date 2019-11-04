@@ -215,7 +215,7 @@ public class Exo_entree extends Activity  implements PopupMenu.OnMenuItemClickLi
                 if (depl==0 && deltaT<MIN_TEMPS && Math.abs(deltaX) <= MIN_DISTANCE) {
                         if (v==tapis) {
                            Intent intent = new Intent(Exo_entree.this, ExoView.class);
-                            intent.putExtra("seance", -1);
+                            intent.putExtra("seance", (long) -1);
                            if (liv >= 0) intent.putExtra("livret_sel", lLivret.get(liv));
                            else intent.putExtra("livret_sel", liv);
                            if (lExo.size()>0 ) {

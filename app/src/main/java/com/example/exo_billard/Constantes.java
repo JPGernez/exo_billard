@@ -12,11 +12,11 @@ public class Constantes {
 	//Couleur utilisée
 	// tapis vert
 	public static final int couleurBandeG = Color.rgb(58, 12, 7);
-	public static final int couleurTapisG = Color.rgb(0, 46, 27);
+	public static final int couleurTapisG = Color.rgb(0, 26, 17);
 	public static final int couleurRadarG = Color.rgb(135, 233, 144);
 	public static final int couleurMoucheG = Color.rgb(56, 111, 72);
 	public static final int couleurLigneG = Color.rgb(9, 82, 40);
-	public static final int couleurBackG = Color.rgb(100, 126, 68);
+	public static final int couleurBackG = Color.rgb(80, 96, 38);
 	public static final int couleurSelG = Color.rgb(121, 128, 129);
 
 	//tapis bleu
@@ -30,11 +30,11 @@ public class Constantes {
 
 	//tapis rouge
 	public static final int couleurBandeR = Color.rgb(50, 13, 13);
-	public static final int couleurTapisR = Color.rgb(123, 6, 6);
+	public static final int couleurTapisR = Color.rgb(93, 6, 6);
 	public static final int couleurRadarR = Color.rgb(254, 150, 160);
 	public static final int couleurMoucheR = Color.rgb(254, 250, 250);
-	public static final int couleurLigneR = Color.rgb(254, 134, 106);
-	public static final int couleurBackR = Color.rgb(174, 74, 52);
+	public static final int couleurLigneR = Color.rgb(150, 64, 76);
+	public static final int couleurBackR = Color.rgb(130, 60, 30);
 	public static final int couleurSelR = Color.rgb(121, 128, 129);
 
 	//tapis N&B
@@ -42,7 +42,7 @@ public class Constantes {
 	public static final int couleurTapisNB = Color.rgb(48, 48, 48);
 	public static final int couleurRadarNB = Color.rgb(158, 158, 158);
 	public static final int couleurMoucheNB = Color.rgb(206, 206, 206);
-	public static final int couleurLigneNB = Color.rgb(11, 22, 22);
+	public static final int couleurLigneNB = Color.rgb(4, 6, 6);
 	public static final int couleurBackNB = Color.rgb(20, 20, 20);
 	public static final int couleurSelNB = Color.rgb(121, 128, 129);
 

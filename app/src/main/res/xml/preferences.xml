@@ -58,15 +58,6 @@
             android:defaultValue="false" />
 
         <CheckBoxPreference
-            android:key="prefSoluce"
-            android:title="Affichage de la solution dès le début (mode entrainement)"
-            android:summaryOn="En mode entrainement on commence par afficher l'exo avec la solution"
-            android:summaryOff="En mode entrainement on commence par afficher que la position de départ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true" />
-
-        <CheckBoxPreference
             android:key="prefSymetrie"
             android:title="Symetrie en mode entraînement"
             android:summaryOn="Les exercices sont affichés aléatoirement aux 4 coins du billard"
@@ -75,8 +66,32 @@
             android:layout_height="wrap_content"
             android:defaultValue="true" />
 
+        <CheckBoxPreference
+            android:key="prefSoluce"
+            android:title="Affichage de la solution dès le début (mode entrainement)"
+            android:summaryOn="En mode entrainement on commence par afficher l'exo avec la solution"
+            android:summaryOff="En mode entrainement on commence par afficher que la position de départ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true" />
+
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Option de calcul des notes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ListPreference
+            android:key="prefNbEval"
+            android:dialogTitle="Choix du nombre d'évaluations à prendre en compte dans la note"
+            android:entries="@array/liste_NbEval_fr"
+            android:entryValues="@array/liste_NbEval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:title="Nombre d'évaluations à prendre en compte" />
+    </PreferenceCategory>
+
+
     <PreferenceCategory
         android:title="Autres"
         android:layout_width="wrap_content"

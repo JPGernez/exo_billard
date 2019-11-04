@@ -57,7 +57,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	int fav =0;
 	int rallumage = 0;
 	NoteEval note = new NoteEval();
-
+	public String nbEvalScore = "";
 
 	public String LMouches = "";
 	public String LCadres = "";
@@ -477,6 +477,7 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 		} else {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
+		nbEvalScore = sharedPreferences.getString("prefNbEval", "toutes");
 	}
 	private void readExo(int numExo) {
 
@@ -1168,15 +1169,20 @@ public class ExoView extends Activity implements PopupMenu.OnMenuItemClickListen
 	}
 
 	private void affich_resultat() {
-		DecimalFormat df = new DecimalFormat("0.0"); // import java.text.DecimalFormat;
-		note = db.getNoteEvalExo(seance, exo.getId());
+		//DecimalFormat df = new DecimalFormat("0.0"); // import java.text.DecimalFormat;
+		note = db.getNoteEvalExo(seance, exo.getId(), nbEvalScore);
 		if (note.getJoue() > 0)
-			tNote.setText("Note: " + df.format((double) ((double) note.getScore()) / ((double) note.getJoue())) + "/5");
-		else tNote.setText("Stats:NA");
+			tNote.setText("Note: " + (note.getScore() / note.getJoue()) + "/20");
+		else tNote.setText("Note :NA");
 	}
 
 	private void viewNote() {
-		Toast.makeText(ExoView.this, note.getJoue() + " évaluations, " + note.getReussi() + " résussis, " + note.getRgpt() + " Rgpt - Score: " + note.getScore(), Toast.LENGTH_LONG).show();
+		DecimalFormat df = new DecimalFormat("0.0"); // import java.text.DecimalFormat;
+
+		if (note.getJoue() > 0)
+			Toast.makeText(ExoView.this, " Evaluation(s): " + note.getJoue() + " \n -Réussi:" + note.getReussi() + " \n -Regroupement:" + note.getRgpt() + " \n -Points par tentative: " + df.format((double) note.getPt() / note.getJoue()), Toast.LENGTH_LONG).show();
+		else
+			Toast.makeText(ExoView.this, "O évaluation", Toast.LENGTH_LONG).show();
 	}
 	private void drawTapis() {
 		tapis.setLMouches(LMouches);

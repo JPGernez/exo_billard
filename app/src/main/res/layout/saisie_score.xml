@@ -99,5 +99,26 @@
 
     </TableRow>
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <CheckBox
+            android:id="@+id/score_officiel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Match officiel" />
+
+
+    </TableRow>
+
+    <DatePicker
+        android:id="@+id/score_date"
+        style="@android:style/Widget.DatePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:datePickerMode="spinner"
+        android:theme="@android:style/Holo.ButtonBar.AlertDialog"
+        android:scaleY="0.7" />
 
 </TableLayout>

@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +34,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -45,6 +51,7 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
 
     SharedPreferences sharedPreferences;
     public String Couleurs = "";
+
     SqlBillardHelper db;
     private boolean CoulAlea;
     ArrayList<String> titres = new ArrayList<>();
@@ -95,6 +102,7 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
 
         CoulAlea = sharedPreferences.getBoolean("tapisAlea", true);
         Couleurs = sharedPreferences.getString("prefCouleur", "blue");
+
     }
 
     private void drawWindow() {
@@ -177,8 +185,6 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                 selectedLiv = idLivret.get(position);
                 tailleLiv = db.getListExo(new MotsCles(), selectedLiv).size();
                 SeekBar s = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
-                SeekBar s2 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBarRgpt);
-
                 TextView t = (TextView) dialogview.findViewById(R.id.Lanc_nb);
                 s.setMax(tailleLiv - 1);
                 if (tailleLiv - 1 > 19) {
@@ -188,15 +194,10 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                     s.setProgress(tailleLiv - 1);
                     t.setText(tailleLiv + " sur " + tailleLiv + " exos du livret");
                 }
-                s2.setProgress(5);
-                TextView t2 = (TextView) dialogview.findViewById(R.id.Lanc_nbSerie);
-                t2.setText("Bonus si serie supperieur à : " + 5);
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -211,7 +212,6 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                 RadioButton rb1 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBOldSeance);
                 rb1.setChecked(true);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -259,34 +259,10 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
             }
         });
 
-        SeekBar sb2 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBarRgpt);
-        sb2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progressChanged2 = 0;
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressChanged2 = progress;
-                TextView t2 = (TextView) dialogview.findViewById(R.id.Lanc_nbSerie);
-                t2.setText("Bonus si série supérieure à : " + progressChanged2 + 1);
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
         RadioButton rb1 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBNvLivret);
         rb1.setChecked(true);
         alert.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int idx) {
-
-                //
-                //
             }
         });
         alert.setButton(Dialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
@@ -305,13 +281,10 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                                         RadioButton rb3 = (RadioButton) dialogview.findViewById(R.id.Lanc_RBOldSeanceTerm);
                                         long idSeance = -1;
                                         SeekBar sb1 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBar);
-                                        SeekBar sb2 = (SeekBar) dialogview.findViewById(R.id.Lanc_seekBarRgpt);
-                                        CheckBox cb1 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkRgpt);
-                                        CheckBox cb2 = (CheckBox) dialogview.findViewById(R.id.Lanc_checkSerie);
                                         Intent intent = new Intent(Accueil.this, ExoView.class);
                                         Spinner spinnerExist = (Spinner) dialogview.findViewById(R.id.Lanc_listSeance);
                                         if (rb1.isChecked()) {
-                                            idSeance = Eval.creaEval(Accueil.this, selectedLiv, sb1.getProgress() + 1, cb1.isChecked(), cb2.isChecked(), sb2.getProgress() + 1);
+                                            idSeance = Eval.creaEval(Accueil.this, selectedLiv, sb1.getProgress() + 1);
                                         } else if (rb2.isChecked()) {
                                             idSeance = pair.first.get(spinnerExist.getSelectedItemPosition());
                                         } else if (rb3.isChecked()) {
@@ -344,6 +317,12 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
         final View dialogview = inflater.inflate(R.layout.saisie_score, null);
         //AlertDialog
         alert.setView(dialogview);
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        DatePicker dp = (DatePicker) dialogview.findViewById(R.id.score_date);
+        dp.init(year, month, day, null);
         alert.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int idx) {
                 //
@@ -394,10 +373,13 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                                         EditText td = (EditText) dialogview.findViewById(R.id.score_nomdroit);
                                         EditText sg = (EditText) dialogview.findViewById(R.id.score_scoregauche);
                                         EditText sd = (EditText) dialogview.findViewById(R.id.score_scoredroit);
+                                        CheckBox off = (CheckBox) dialogview.findViewById(R.id.score_officiel);
+                                        DatePicker dp = (DatePicker) dialogview.findViewById(R.id.score_date);
                                         String adv;
                                         int scoreadv;
                                         int score;
                                         int ordre;
+                                        boolean officiel;
                                         if (tg.isActivated()) {
                                             adv = tg.getText().toString();
                                             scoreadv = Integer.parseInt(sg.getText().toString());
@@ -409,10 +391,22 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
                                             score = Integer.parseInt(sg.getText().toString());
                                             ordre = 1;
                                         }
+                                        officiel = off.isChecked();
+                                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                                        String dateString = String.valueOf(dp.getYear()) + "-" + String.valueOf(dp.getMonth()) + "-" + String.valueOf(dp.getDayOfMonth());
+                                        Log.d("date", dateString);
+                                        Date dt = null;
+                                        try {
+                                            dt = df.parse(dateString);
+                                        } catch (ParseException e) {
+                                        }
+                                        Log.d("date", df.format(dt));
+
                                         if (rep < 1) {
                                             Toast.makeText(Accueil.this, "Le nombre de reprise ne peut pas etre nul", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            db.saveMatch(adv, rep, score, scoreadv, ordre);
+                                            long matchid = db.saveMatch(adv, rep, score, scoreadv, ordre, officiel, dt);
+                                            Toast.makeText(Accueil.this, String.valueOf(matchid) + "-" + adv + "-" + rep + "-" + ordre + "-" + officiel + "-" + dt, Toast.LENGTH_SHORT).show();
                                             alert.cancel();
                                         }
                                     }
@@ -443,6 +437,7 @@ public class Accueil extends Activity implements PopupMenu.OnMenuItemClickListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //on regarde quelle Activity a répondu
         readPref();
+        Toast.makeText(Accueil.this, "Retour pref", Toast.LENGTH_SHORT).show();
         drawWindow();
     }
 

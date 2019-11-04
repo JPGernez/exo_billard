@@ -242,8 +242,10 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
         //ligne de cadre
 		mPaint.setColor(couleurLigne);
 		mPaint.setPathEffect(null);
-		if ("point".equals(LCadres.intern())) {
-			mPaint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 0));
+		if ("trait".equals(LCadres.intern())) {
+			mPaint.setPathEffect(new DashPathEffect(new float[]{20, 40}, 0));
+		} else if ("point".equals(LCadres.intern())) {
+			mPaint.setPathEffect(new DashPathEffect(new float[]{5, 30}, 0));
 		}
 		if (!"sans".equals(LCadres.intern())) {
 			pCanvas.drawLine(largSurf / 3 + largBande, largBande, largSurf / 3 + largBande, largSurf + largBande, mPaint);
@@ -254,8 +256,10 @@ public class TapisView extends SurfaceView implements SurfaceHolder.Callback {
 		mPaint.setPathEffect(null);
 
         //ligne de mouche
-		if ("point".equals(LMouches.intern())) {
-			mPaint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 0));
+		if ("trait".equals(LMouches.intern())) {
+			mPaint.setPathEffect(new DashPathEffect(new float[]{20, 40}, 0));
+		} else if ("point".equals(LMouches.intern())) {
+			mPaint.setPathEffect(new DashPathEffect(new float[]{5, 30}, 0));
 		}
 		if (!"sans".equals(LMouches.intern())) {
 			pCanvas.drawLine(largSurf / 4 + largBande, largBande, largSurf / 4 + largBande, largSurf + largBande, mPaint);

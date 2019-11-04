@@ -1,5 +1,7 @@
 package com.example.exo_billard;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Pair;
 
 import java.io.Serializable;
